@@ -79,6 +79,7 @@ var/list/be_special_flags = list(
 #define MODE_REVOLUTIONARY "revolutionary"
 #define MODE_MALFUNCTION "malf"
 #define MODE_TRAITOR "traitor"
+#define MODE_SWARM "swarm"
 
 #define DEFAULT_TELECRYSTAL_AMOUNT 12
 
