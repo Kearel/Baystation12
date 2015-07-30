@@ -6,7 +6,7 @@
 	unarmed_types = list(/datum/unarmed_attack/stomp, /datum/unarmed_attack/kick,  /datum/unarmed_attack/punch, /datum/unarmed_attack/bite)
 	blurb = "Jesus, how did this get on the station? Damn things breed faster then diona."
 
-	flags = CAN_JOIN 	| NO_SCAN | HAS_EYE_COLOR | HAS_SKIN_TONE
+	flags = CAN_JOIN 	| HAS_EYE_COLOR | HAS_SKIN_TONE
 
 	blood_color = "#2299FC"
 	flesh_color = "#808D11"

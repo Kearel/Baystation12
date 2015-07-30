@@ -545,6 +545,11 @@ area/space/atmosalert()
 	name = "\improper south of mining station"
 	icon_state = "north"
 
+//swarm stuff
+/area/swarm_station/start
+	name = "\improper Derelict Ship"
+	icon_state = "yellow"
+
 //PRISON
 /area/prison
 	name = "\improper Prison Station"
