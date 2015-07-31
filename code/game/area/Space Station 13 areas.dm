@@ -325,6 +325,11 @@ area/space/atmosalert()
 	icon_state = "yellow"
 	requires_power = 0
 
+/area/shuttle/swarm/station
+	name = "\improper Derelict"
+	icon_state = "yellow"
+	requires_power = 0
+
 /area/airtunnel1/      // referenced in airtunnel.dm:759
 
 /area/dummy/           // Referenced in engine.dm:261

@@ -1,9 +1,15 @@
+/* Swarms use three machines to create things.
+The Growing Vat: Creates Swarm from biological matter. Can also heal them (eventually will fix bones/organs individually. Probably not limbs.)
+
+*/
+
 //the vat works like a primordial soup sort of deal. Give it a jolt of electricity and you never know what will come out.
 
 /obj/machinery/swarm/vat
 	name = "Growing Vat"
 	desc = "This machine spits and spews liquid you would much rather not know the origin of."
-	icon_state = "broadcaster_send"
+	icon = 'icons/obj/swarm.dmi'
+	icon_state = "vat_empty"
 	density = 1
 	anchored = 1
 
@@ -24,6 +30,7 @@
 			qdel(containing)
 			biomass += 100
 			use_power(2000)
+			icon_state = "vat_empty"
 			return
 		var/mob/living/carbon/human/H = containing
 		if(istype(H)) //if they are swarm, we heal them
@@ -41,17 +48,17 @@
 				biomass -= 5
 
 				return
-			else if(prob(5)) //we can also use this to slowly scramble the dna
+			else if(prob(10)) //we can also use this to slowly scramble the dna
 				randmutb(H)
 				H.dna.UpdateSE()
 				H.dna.UpdateUI()
-		containing.adjustCloneLoss(5)
-		containing.adjustBrainLoss(5)
-		containing.adjustToxLoss(5)
-		containing.adjustFireLoss(5)
-		containing.adjustBruteLoss(5)
-		containing.adjustOxyLoss(5)
-		biomass += 5
+		containing.adjustCloneLoss(2)
+		containing.adjustBrainLoss(2)
+		containing.adjustToxLoss(2)
+		containing.adjustFireLoss(2)
+		containing.adjustBruteLoss(2)
+		containing.adjustOxyLoss(2)
+		biomass += 0.2
 		// it slowly eats at you otherwise
 	return
 
@@ -64,8 +71,10 @@
 
 	H.ckey = player.ckey
 	player.mob.mind.transfer_to(H)
+
 	callHook("clone", list(H))
 	update_antag_icons(H.mind)
+
 	H.adjustCloneLoss(80)
 	H.adjustBrainLoss(80)
 	H.Paralyse(8)
@@ -77,7 +86,8 @@
 	H << "<span class='notice'><b>You scream internally as you are forced into existance.</i></span>"
 
 	biomass -= 100
-	return
+	icon_state = "vat_full"
+	return H
 
 /obj/machinery/swarm/vat/attack_hand(var/mob/user)
 	if(containing)
@@ -102,19 +112,17 @@
 			user << "Something is already inside there."
 			return
 
-		if(do_after(user,10))
+		visible_message("[user] attempts to put [W:affecting] into \the [src].", 3)
+
+		if(do_after(user,20))
 			if(containing)
 				user << "Something is already inside there."
 				return
 
-			var/mob/M = W:affecting
-			if(M.client)
-				M.client.perspective = EYE_PERSPECTIVE
-				M.client.eye = src
+			visible_message("[user] puts [W:affecting] into \the [src].", 3)
 
-			M.loc = src
-			containing = M
-			update_use_power(2)
+			put_inside(W:affecting)
+
 			del(W)
 		return
 	var/obj/item/organ/O = W
@@ -144,11 +152,8 @@
 	spit_out()
 
 /obj/machinery/swarm/vat/proc/spit_out()
-
-
 	if(containing)
 		src.visible_message("The vat spits out [containing]")
-		containing.Paralyse(2)
 		containing.loc = loc
 		if(containing.client)
 			containing.client.eye = containing.client.mob
@@ -156,10 +161,21 @@
 
 		domutcheck(containing)
 		containing = null
+		icon_state = "vat_empty"
 		update_use_power(1)
 	else
 		usr << "<span class='warning'>The vat is empty.</span>"
 	return
+
+/obj/machinery/swarm/vat/proc/put_inside(var/mob/M)
+	M.stop_pulling()
+	if(M.client)
+		M.client.perspective = EYE_PERSPECTIVE
+		M.client.eye = src
+	M.loc = src
+	containing = M
+	icon_state = "vat_full"
+	update_use_power(2)
 
 /obj/machinery/swarm/vat/verb/enter()
 	set name = "Enter Vat"
@@ -177,10 +193,8 @@
 		if(containing)
 			usr << "<span class='warning'>The vat already has something inside it.</span>"
 			return
-		usr.stop_pulling()
-		usr.client.perspective = EYE_PERSPECTIVE
-		usr.client.eye = src
-		usr.loc = src
-		containing = usr
-		update_use_power(2)
+
+		put_inside(usr)
 	return
+
+//
