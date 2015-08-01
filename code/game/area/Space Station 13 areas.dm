@@ -551,9 +551,13 @@ area/space/atmosalert()
 	icon_state = "north"
 
 //swarm stuff
-/area/swarm_station/start
-	name = "\improper Derelict Ship"
-	icon_state = "yellow"
+/area/swarm_station/transit
+	name = "\improper hyperspace"
+	icon_state = "shuttle"
+
+/area/swarm_station/north
+	name = "\improper north of station"
+	icon_state = "north"
 
 //PRISON
 /area/prison

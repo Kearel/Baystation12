@@ -176,7 +176,7 @@
 		return
 
 	return
-	
+
 /obj/machinery/vending/emag_act(var/remaining_charges, var/mob/user)
 	if (!emagged)
 		src.emagged = 1
@@ -869,6 +869,15 @@
 	contraband = list(/obj/item/seeds/amanitamycelium = 2,/obj/item/seeds/glowshroom = 2,/obj/item/seeds/libertymycelium = 2,/obj/item/seeds/mtearseed = 2,
 					  /obj/item/seeds/nettleseed = 2,/obj/item/seeds/reishimycelium = 2,/obj/item/seeds/reishimycelium = 2,/obj/item/seeds/shandseed = 2,)
 	premium = list(/obj/item/toy/waterflower = 1)
+
+/obj/machinery/vending/hydroseeds/swarm
+	name = "Broken dispenser"
+	desc = "Whatever it was, it survived. Barely."
+	product_slogans = "SUBSTA@#$&*EEEEE#@$^*@.;@$@#GROOOW."
+	product_ads = "@#^$#%$#ARCH."
+	icon_state = "seeds-broken"
+
+	products = list(/obj/item/seeds/plumpmycelium = 3, /obj/item/seeds/amanitamycelium = 3, /obj/item/seeds/nettleseed = 3)
 
 /**
  *  Populate hydroseeds product_records

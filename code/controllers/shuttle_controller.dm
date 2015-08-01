@@ -254,14 +254,21 @@ var/global/datum/shuttle_controller/shuttle_controller
 
 	//Swarm Shuttle
 	var/datum/shuttle/multi_shuttle/SS = new/datum/shuttle/multi_shuttle()
-	//SS.origin = locate(/area/swarm_station/start)
+
+	SS.origin = locate(/area/shuttle/swarm/station)
 	SS.start_location = "Deep Space"
 
 	//destinations soon
 
 	SS.announcer = "#$%@%#ROR ERROR"
-	SS.arrival_message = "@#%^%@#$&%^@#$WE@$*@#^$@#%@#$^&%@#$*^%@#COME#@^%^#$@&&"
-	SS.departure_message = "LEAAAAAVE"
+	SS.arrival_message = "RIGHT OF CONQU#@$@#%LAY DOWN YOUR ARMS"
+	SS.departure_message = "MORE WILL C@#$(#$@E ARE MANY"
+
+	SS.destinations = list(
+		"asdf" = locate(/area/swarm_station/north),
+		)
+
+	SS.interim = locate(/area/swarm_station/transit)
 
 	SS.warmup_time = 0
 	shuttles["Swarm"] = SS

@@ -1,5 +1,5 @@
-/* Swarms use three machines to create things.
-The Growing Vat: Creates Swarm from biological matter. Can also heal them (eventually will fix bones/organs individually. Probably not limbs.)
+/* Swarm machines:
+The Growing Vat: Creates Swarm from biological matter. Can also heal them.
 
 */
 
@@ -52,6 +52,7 @@ The Growing Vat: Creates Swarm from biological matter. Can also heal them (event
 				randmutb(H)
 				H.dna.UpdateSE()
 				H.dna.UpdateUI()
+				domutcheck(H, null)
 		containing.adjustCloneLoss(2)
 		containing.adjustBrainLoss(2)
 		containing.adjustToxLoss(2)
@@ -62,7 +63,29 @@ The Growing Vat: Creates Swarm from biological matter. Can also heal them (event
 		// it slowly eats at you otherwise
 	return
 
-/obj/machinery/swarm/vat/proc/spawnSwarm(var/client/player)
+/obj/machinery/swarm/vat/proc/spawn_damage(var/mob/living/carbon/human/H)
+	H.adjustCloneLoss(80)
+	H.adjustBrainLoss(80)
+	log_admin("Something something.")
+	//1 good 1 bad max
+	randmutb(H)
+	randmutg(H)
+	H.dna.UpdateSE()
+	domutcheck(H, null)
+	var/amount = 0
+	for(var/obj/item/organ/external/E in H.organs)
+		if(prob(5) && (istype(E,/obj/item/organ/external/arm) || istype(E,/obj/item/organ/external/hand) || istype(E,/obj/item/organ/external/foot)) )
+			H.organs_by_name[E.limb_name] = null
+			H.organs -= E
+			for(var/obj/item/organ/external/child in E.children)
+				H.organs_by_name[child.limb_name] = null
+				H.organs -= child
+			amount++
+			if(amount == 2) break
+
+	H.updatehealth()
+
+/obj/machinery/swarm/vat/proc/spawn_swarm(var/client/player)
 	if(biomass < 100 || containing) return
 	//alright alright. this works pretty much like cloning.
 
@@ -75,13 +98,7 @@ The Growing Vat: Creates Swarm from biological matter. Can also heal them (event
 	callHook("clone", list(H))
 	update_antag_icons(H.mind)
 
-	H.adjustCloneLoss(80)
-	H.adjustBrainLoss(80)
-	H.Paralyse(8)
-
-	H.updatehealth()
-
-
+	spawn_damage(H)
 
 	H << "<span class='notice'><b>You scream internally as you are forced into existance.</i></span>"
 
@@ -102,7 +119,7 @@ The Growing Vat: Creates Swarm from biological matter. Can also heal them (event
 	else
 		var/answer = alert(user.client, "Would you like to spawn as a Swarm?", "Swarm Vat", "Yes", "No")
 		if(answer == "Yes")
-			spawnSwarm(user.client)
+			spawn_swarm(user.client)
 	return
 /obj/machinery/swarm/vat/attackby(var/obj/item/W, var/mob/user)
 	if(istype(W,/obj/item/weapon/grab))

@@ -232,3 +232,9 @@
 	hitsound = 'sound/weapons/bladeslice.ogg'
 	attack_verb = list("attacked", "poked", "jabbed", "torn", "gored")
 	default_material = "glass"
+
+/obj/item/weapon/material/twohanded/spear/glass/New(var/newloc)
+	..(newloc,"glass")
+
+/obj/item/weapon/material/twohanded/spear/metal/New(var/newloc)
+	..(newloc,"steel")
