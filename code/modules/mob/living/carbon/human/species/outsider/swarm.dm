@@ -21,4 +21,4 @@
 		"eyes" =     /obj/item/organ/eyes
 		)
 
-	total_health = 40
+	total_health = 50
