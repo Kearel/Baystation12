@@ -105,7 +105,9 @@
 	ion.stop()
 	anchored = kickstand
 
-/obj/vehicle/train/cargo/bullet_act(var/obj/item/projectile/Proj)
+	..()
+
+/obj/vehicle/swarm/bullet_act(var/obj/item/projectile/Proj)
 	if(buckled_mob && prob(40))
 		buckled_mob.bullet_act(Proj)
 		return
