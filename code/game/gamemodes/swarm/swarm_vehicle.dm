@@ -1,12 +1,11 @@
 /obj/vehicle/swarm/
 	name = "space-bike"
 	desc = "Designed by Swarm for Swarm. "
-	icon = 'icons/obj/swarm.dmi'
-	icon_state = "bike_off"
+	icon = 'icons/obj/bike.dmi'
+	icon_state = "bike_back_off"
 	dir = SOUTH
 
 	load_item_visible = 1
-	load_offset_x = 0
 	mob_offset_y = 7
 
 	health = 100
@@ -23,6 +22,7 @@
 	ion = new /datum/effect/effect/system/ion_trail_follow()
 	ion.set_up(src)
 	turn_off()
+	overlays += image('icons/obj/bike.dmi', "bike_front_off", MOB_LAYER + 1)
 
 /obj/vehicle/swarm/verb/toggle()
 	set name = "Toggle Engine"
@@ -89,22 +89,30 @@
 		move_delay = 1
 	else
 		move_delay = 10
-
-	return ..()
+	var ret = ..()
+	//overlay.dir = dir
+	//update_icon()
+	return ret
 
 /obj/vehicle/swarm/turn_on()
-	icon_state = "bike_on"
 	ion.start()
 	anchored = 1
+	overlays.Cut()
+	overlays += image('icons/obj/bike.dmi', "bike_front_on", MOB_LAYER + 1)
+
+	icon_state = "bike_back_on"
+
 	if(pulledby)
 		pulledby.stop_pulling()
 	..()
-
 /obj/vehicle/swarm/turn_off()
-	icon_state = "bike_off"
 	ion.stop()
 	anchored = kickstand
 
+	overlays.Cut()
+	overlays += image('icons/obj/bike.dmi', "bike_front_off", MOB_LAYER + 1)
+
+	icon_state = "bike_back_off"
 	..()
 
 /obj/vehicle/swarm/bullet_act(var/obj/item/projectile/Proj)
