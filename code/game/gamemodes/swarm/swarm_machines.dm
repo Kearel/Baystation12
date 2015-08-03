@@ -184,6 +184,8 @@ The Tube: Makes the biomass and transfers it where it is needed. Very dangerous.
 		put_inside(usr)
 	return
 
+/* This is where the gunk comes from
+*/
 
 /obj/machinery/swarm/distillery
 	name = "Bio-Distillery Tube"
@@ -330,3 +332,9 @@ The Tube: Makes the biomass and transfers it where it is needed. Very dangerous.
 	var/mob/living/carbon/human/H = containing
 	if(prob(15) && istype(H))
 		H.custom_pain("Your flesh burns so much!",1)
+
+
+/* This is where all their "fancy" weapons come from.
+Just insert metal.
+*/
+
