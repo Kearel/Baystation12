@@ -39,7 +39,6 @@ The Tube: Makes the biomass and transfers it where it is needed. Very dangerous.
 				if(connected.biomass < 5 || containing.health == containing.maxHealth)
 					spit_out()
 					return
-				containing.adjustCloneLoss(-5)
 				containing.adjustBrainLoss(-5)
 				containing.adjustToxLoss(-5)
 				containing.adjustFireLoss(-5)
@@ -49,17 +48,12 @@ The Tube: Makes the biomass and transfers it where it is needed. Very dangerous.
 	return
 
 /obj/machinery/swarm/vat/proc/spawn_damage(var/mob/living/carbon/human/H)
-	H.adjustCloneLoss(80)
 	H.adjustBrainLoss(80)
 	log_admin("Something something.")
-	//1 good 1 bad max
-	randmutb(H)
-	randmutg(H)
-	H.dna.UpdateSE()
-	domutcheck(H, null)
+
 	var/amount = 0
 	for(var/obj/item/organ/external/E in H.organs)
-		if(prob(5) && (istype(E,/obj/item/organ/external/arm) || istype(E,/obj/item/organ/external/hand) || istype(E,/obj/item/organ/external/foot)) )
+		if(prob(5) && (!istype(E,/obj/item/organ/external/chest) && !istype(E,/obj/item/organ/external/groin)) )
 			H.organs_by_name[E.limb_name] = null
 			H.organs -= E
 			for(var/obj/item/organ/external/child in E.children)
