@@ -6,7 +6,6 @@
 	desc = "For all your occult needs!"
 	icon_state = "deck_tarot"
 
-
 /obj/item/weapon/deck/tarot/New()
 	..()
 
@@ -26,3 +25,15 @@
 		P.name = "[name]"
 		P.card_icon = "tarot_major"
 		cards += P
+
+/obj/item/weapon/deck/tarot/attack_self(var/mob/user as mob)
+	var/list/newcards = list()
+	while(cards.len)
+		var/datum/playingcard/P = pick(cards)
+		P.name = replacetext(P.name," reversed","")
+		if(prob(50))
+			P.name += " reversed"
+		newcards += P
+		cards -= P
+	cards = newcards
+	user.visible_message("\The [user] shuffles [src].")
