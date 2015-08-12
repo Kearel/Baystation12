@@ -12,6 +12,11 @@
 	cards.Cut() //get rid of old cards.
 
 	var/datum/playingcard/P
+	for(var/name in list("Fool","Magician","High Priestess","Empress","Emperor","Hierophant","Lovers","Chariot","Strength","Hermit","Wheel of Fortune","Justice","Hanged Man","Death","Temperance","Devil","Tower","Star","Moon","Sun","Judgement","World"))
+		P = new()
+		P.name = "[name]"
+		P.card_icon = "tarot_major"
+		cards += P
 	for(var/suit in list("wands","pentacles","cups","swords"))
 
 
@@ -20,11 +25,6 @@
 			P.name = "[number] of [suit]"
 			P.card_icon = "tarot_[suit]"
 			cards += P
-	for(var/name in list("Fool","Magician","High Priestess","Empress","Emperor","Hierophant","Lovers","Chariot","Strength","Hermit","Wheel of Fortune","Justice","Hanged Man","Death","Temperance","Devil","Tower","Star","Moon","Sun","Judgement","World"))
-		P = new()
-		P.name = "[name]"
-		P.card_icon = "tarot_major"
-		cards += P
 
 /obj/item/weapon/deck/tarot/attack_self(var/mob/user as mob)
 	var/list/newcards = list()
