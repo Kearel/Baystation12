@@ -81,6 +81,9 @@
 			<HR>
 			<A href='byond://?src=\ref[src];spell_choice=scrying'>Scrying Orb</A><BR>
 			<I>An incandescent orb of crackling energy, using it will allow you to ghost while alive, allowing you to spy upon the station with ease. In addition, buying it will permanently grant you x-ray vision.</I><BR>
+			<HR>
+			<A href='byond://?src=\ref[src];spell_choice=monstermanual'>Monster Manual</A><BR>
+			<I>A tome dedicated to the cataloguing of various magical beasts. You can use it to summon a familiar using a passing soul.</I><BR>
 			<HR>"}
 		// END AUTOFIX
 		if(op)
@@ -248,6 +251,11 @@
 								H.see_invisible = SEE_INVISIBLE_LEVEL_TWO
 								H << "<span class='notice'>The walls suddenly disappear.</span>"
 							temp = "You have purchased a scrying orb, and gained x-ray vision."
+							max_uses--
+						if("monstermanual")
+							feedback_add_details("wizard_spell_learned","MA") //please do not change the abbreviation to keep data processing consistent. Add a unique id to any new spells
+							new /obj/item/weapon/monster_manual(get_turf(H))
+							temp = "you have purchased the monster manual."
 							max_uses--
 		else
 			if(href_list["temp"])
