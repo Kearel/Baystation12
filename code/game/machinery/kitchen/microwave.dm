@@ -137,13 +137,13 @@
 		return 1
 	else if(istype(O,/obj/item/weapon/crowbar))
 		user.visible_message( \
-			"<span class='notice'>\The [user] begins [src.anchored ? "un" : ""]prying \the [src] [src.anchored ? "out of" : "into"] the frame.</span>", \
-			"<span class='notice'>You attempt to [src.anchored ? "un" : ""]pry \the [src] [src.anchored ? "out of" : "into"] the frame.</span>"
+			"<span class='notice'>\The [user] begins [src.anchored ? "dislodging" : "prying"] the microwave [src.anchored ? "out of" : "into"] the frame.</span>", \
+			"<span class='notice'>You attempt to [src.anchored ? "dislodge" : "pry"] the microwave [src.anchored ? "out of" : "into"] the frame.</span>"
 			)
 		if (do_after(user,20))
 			user.visible_message( \
-			"<span class='notice'>\The [user] [src.anchored ? "un" : ""]prys \the [src] [src.anchored ? "out of" : "into"] the frame.</span>", \
-			"<span class='notice'>You [src.anchored ? "un" : ""]pry \the [src] [src.anchored ? "out of" : "into"] the frame.</span>"
+			"<span class='notice'>\The [user] [src.anchored ? "dislodges" : "prys"] the microwave [src.anchored ? "out of" : "into"] the frame.</span>", \
+			"<span class='notice'>You [src.anchored ? "dislodge" : "pry"] the microwave [src.anchored ? "out of" : "into"] the frame.</span>"
 			)
 			src.anchored = !src.anchored
 		else
