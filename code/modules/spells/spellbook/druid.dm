@@ -24,6 +24,7 @@
 				/spell/targeted/entangle = 							1,
 				/spell/aoe_turf/conjure/grove/sanctuary = 			1,
 				/spell/aoe_turf/knock = 							1,
+				/spell/noclothes = 									1,
 				/obj/structure/closet/wizard/souls = 				1,
 				/obj/item/weapon/magic_rock = 						1,
 				/obj/item/weapon/monster_manual = 					1,
