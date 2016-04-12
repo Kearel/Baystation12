@@ -140,6 +140,23 @@
 	new /obj/item/clothing/glasses/chameleon(src)
 	new /obj/item/weapon/gun/energy/chameleon(src)
 
+/obj/item/weapon/storage/box/syndie_kit/chameleon_z
+	name = "perma-chameleon kit"
+	desc = "Comes with all the clothes you need to impersonate most people. Now permanent!"
+
+/obj/item/weapon/storage/box/syndie_kit/chameleon_z/New()
+	..()
+	new /obj/item/clothing/under/chameleon/z2(src)
+	new /obj/item/clothing/head/chameleon/z2(src)
+	new /obj/item/clothing/suit/chameleon/z2(src)
+	new /obj/item/clothing/shoes/chameleon/z2(src)
+	new /obj/item/weapon/storage/backpack/chameleon/z2(src)
+	new /obj/item/clothing/gloves/chameleon/z2(src)
+	new /obj/item/clothing/mask/chameleon/z2(src)
+	new /obj/item/clothing/glasses/chameleon/z2(src)
+	new /obj/item/weapon/gun/energy/chameleon/z2(src)
+
+
 /obj/item/weapon/storage/box/syndie_kit/clerical
 	name = "clerical kit"
 	desc = "Comes with all you need to fake paperwork. Assumes you have passed basic writing lessons."

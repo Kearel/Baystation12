@@ -44,6 +44,7 @@
 	desc = "It's a plain jumpsuit. It seems to have a small dial on the wrist."
 	origin_tech = list(TECH_ILLEGAL = 3)
 	var/global/list/clothing_choices
+	var/emp_proof = 0
 
 /obj/item/clothing/under/chameleon/New()
 	..()
@@ -52,6 +53,8 @@
 		clothing_choices = generate_chameleon_choices(/obj/item/clothing/under, blocked)
 
 /obj/item/clothing/under/chameleon/emp_act(severity)
+	if(emp_proof)
+		return
 	name = "psychedelic"
 	desc = "Groovy!"
 	icon_state = "psyche"
@@ -81,6 +84,7 @@
 	origin_tech = list(TECH_ILLEGAL = 3)
 	body_parts_covered = 0
 	var/global/list/clothing_choices
+	var/emp_proof = 0
 
 /obj/item/clothing/head/chameleon/New()
 	..()
@@ -89,6 +93,8 @@
 		clothing_choices = generate_chameleon_choices(/obj/item/clothing/head, blocked)
 
 /obj/item/clothing/head/chameleon/emp_act(severity) //Because we don't have psych for all slots right now but still want a downside to EMP.  In this case your cover's blown.
+	if(emp_proof)
+		return
 	name = "grey cap"
 	desc = "It's a baseball hat in a tasteful grey colour."
 	icon_state = "greysoft"
@@ -117,6 +123,7 @@
 	desc = "It appears to be a vest of standard armor, except this is embedded with a hidden holographic cloaker, allowing it to change it's appearance, but offering no protection.. It seems to have a small dial inside."
 	origin_tech = list(TECH_ILLEGAL = 3)
 	var/global/list/clothing_choices
+	var/emp_proof = 0
 
 /obj/item/clothing/suit/chameleon/New()
 	..()
@@ -125,6 +132,8 @@
 		clothing_choices = generate_chameleon_choices(/obj/item/clothing/suit, blocked)
 
 /obj/item/clothing/suit/chameleon/emp_act(severity) //Because we don't have psych for all slots right now but still want a downside to EMP.  In this case your cover's blown.
+	if(emp_proof)
+		return
 	name = "armor"
 	desc = "An armored vest that protects against some damage."
 	icon_state = "armor"
@@ -152,6 +161,7 @@
 	desc = "They're comfy black shoes, with clever cloaking technology built in. It seems to have a small dial on the back of each shoe."
 	origin_tech = list(TECH_ILLEGAL = 3)
 	var/global/list/clothing_choices
+	var/emp_proof = 0
 
 /obj/item/clothing/shoes/chameleon/New()
 	..()
@@ -160,6 +170,8 @@
 		clothing_choices = generate_chameleon_choices(/obj/item/clothing/shoes, blocked)
 
 /obj/item/clothing/shoes/chameleon/emp_act(severity) //Because we don't have psych for all slots right now but still want a downside to EMP.  In this case your cover's blown.
+	if(emp_proof)
+		return
 	name = "black shoes"
 	desc = "A pair of black shoes."
 	icon_state = "black"
@@ -188,6 +200,7 @@
 	desc = "A backpack outfitted with cloaking tech. It seems to have a small dial inside, kept away from the storage."
 	origin_tech = list(TECH_ILLEGAL = 3)
 	var/global/list/clothing_choices
+	var/emp_proof = 0
 
 /obj/item/weapon/storage/backpack/chameleon/New()
 	..()
@@ -196,6 +209,8 @@
 		clothing_choices = generate_chameleon_choices(/obj/item/weapon/storage/backpack, blocked)
 
 /obj/item/weapon/storage/backpack/chameleon/emp_act(severity) //Because we don't have psych for all slots right now but still want a downside to EMP.  In this case your cover's blown.
+	if(emp_proof)
+		return
 	name = "backpack"
 	desc = "You wear this on your back and put items into it."
 	icon_state = "backpack"
@@ -231,6 +246,7 @@
 	desc = "It looks like a pair of gloves, but it seems to have a small dial inside."
 	origin_tech = list(TECH_ILLEGAL = 3)
 	var/global/list/clothing_choices
+	var/emp_proof = 0
 
 /obj/item/clothing/gloves/chameleon/New()
 	..()
@@ -238,6 +254,8 @@
 		clothing_choices = generate_chameleon_choices(/obj/item/clothing/gloves, list(src.type))
 
 /obj/item/clothing/gloves/chameleon/emp_act(severity) //Because we don't have psych for all slots right now but still want a downside to EMP.  In this case your cover's blown.
+	if(emp_proof)
+		return
 	name = "black gloves"
 	desc = "It looks like a pair of gloves, but it seems to have a small dial inside."
 	icon_state = "black"
@@ -266,6 +284,7 @@
 	desc = "It looks like a plain gask mask, but on closer inspection, it seems to have a small dial inside."
 	origin_tech = list(TECH_ILLEGAL = 3)
 	var/global/list/clothing_choices
+	var/emp_proof = 0
 
 /obj/item/clothing/mask/chameleon/New()
 	..()
@@ -273,6 +292,8 @@
 		clothing_choices = generate_chameleon_choices(/obj/item/clothing/mask, list(src.type))
 
 /obj/item/clothing/mask/chameleon/emp_act(severity) //Because we don't have psych for all slots right now but still want a downside to EMP.  In this case your cover's blown.
+	if(emp_proof)
+		return
 	name = "gas mask"
 	desc = "It's a gas mask."
 	icon_state = "gas_alt"
@@ -301,6 +322,7 @@
 	desc = "It looks like a plain set of mesons, but on closer inspection, it seems to have a small dial inside."
 	origin_tech = list(TECH_ILLEGAL = 3)
 	var/list/global/clothing_choices
+	var/emp_proof = 0
 
 /obj/item/clothing/glasses/chameleon/New()
 	..()
@@ -308,6 +330,8 @@
 		clothing_choices = generate_chameleon_choices(/obj/item/clothing/glasses, list(src.type))
 
 /obj/item/clothing/glasses/chameleon/emp_act(severity) //Because we don't have psych for all slots right now but still want a downside to EMP.  In this case your cover's blown.
+	if(emp_proof)
+		return
 	name = "Optical Meson Scanner"
 	desc = "It's a set of mesons."
 	icon_state = "meson"
@@ -409,3 +433,121 @@
 		var/mob/M = src.loc
 		M.update_inv_r_hand()
 		M.update_inv_l_hand()
+
+
+//Z2 SPECIFIC VERSIONS
+//EMP proof, counts as wizard garb, BUT cannot be changed on any z level that isn't 2.
+/obj/item/clothing/shoes/chameleon/z2
+	wizard_garb = 1
+	origin_tech = null
+	emp_proof = 1
+
+/obj/item/clothing/shoes/chameleon/z2/disguise()
+	var/turf/T = get_turf(loc)
+	if(T.z == 2)
+		..()
+
+/obj/item/clothing/shoes/chameleon/z2/change()
+	var/turf/T = get_turf(loc)
+	if(T.z == 2)
+		..()
+
+/obj/item/clothing/suit/chameleon/z2
+	wizard_garb = 1
+	origin_tech = null
+	emp_proof = 1
+
+/obj/item/clothing/suit/chameleon/z2/disguise()
+	var/turf/T = get_turf(loc)
+	if(T.z == 2)
+		..()
+
+/obj/item/clothing/suit/chameleon/z2/change()
+	var/turf/T = get_turf(loc)
+	if(T.z == 2)
+		..()
+
+/obj/item/clothing/glasses/chameleon/z2
+	origin_tech = null
+	emp_proof = 1
+
+/obj/item/clothing/glasses/chameleon/z2/disguise()
+	var/turf/T = get_turf(loc)
+	if(T.z == 2)
+		..()
+
+/obj/item/clothing/glasses/chameleon/z2/change()
+	var/turf/T = get_turf(loc)
+	if(T.z == 2)
+		..()
+
+/obj/item/clothing/under/chameleon/z2
+	origin_tech = null
+	emp_proof = 1
+
+/obj/item/clothing/under/chameleon/z2/disguise()
+	var/turf/T = get_turf(loc)
+	if(T.z == 2)
+		..()
+
+/obj/item/clothing/under/chameleon/z2/change()
+	var/turf/T = get_turf(loc)
+	if(T.z == 2)
+		..()
+
+/obj/item/clothing/gloves/chameleon/z2
+	origin_tech = null
+	emp_proof = 1
+
+/obj/item/clothing/gloves/chameleon/z2/disguise()
+	var/turf/T = get_turf(loc)
+	if(T.z == 2)
+		..()
+
+/obj/item/clothing/gloves/chameleon/z2/change()
+	var/turf/T = get_turf(loc)
+	if(T.z == 2)
+		..()
+
+/obj/item/clothing/head/chameleon/z2
+	origin_tech = null
+	emp_proof = 1
+	wizard_garb = 1
+
+/obj/item/clothing/head/chameleon/z2/disguise()
+	var/turf/T = get_turf(loc)
+	if(T.z == 2)
+		..()
+
+/obj/item/clothing/head/chameleon/z2/change()
+	var/turf/T = get_turf(loc)
+	if(T.z == 2)
+		..()
+
+/obj/item/weapon/storage/backpack/chameleon/chameleon/z2
+	origin_tech = null
+	emp_proof = 1
+
+/obj/item/weapon/storage/backpack/chameleon/disguise()
+	var/turf/T = get_turf(loc)
+	if(T.z == 2)
+		..()
+
+/obj/item/weapon/storage/backpack/chameleon/change()
+	var/turf/T = get_turf(loc)
+	if(T.z == 2)
+		..()
+
+/obj/item/clothing/mask/chameleon/z2
+	origin_tech = null
+	emp_proof = 1
+
+/obj/item/clothing/mask/chameleon/z2/disguise()
+	var/turf/T = get_turf(loc)
+	if(T.z == 2)
+		..()
+
+/obj/item/clothing/mask/chameleon/z2/change()
+	var/turf/T = get_turf(loc)
+	if(T.z == 2)
+		..()
