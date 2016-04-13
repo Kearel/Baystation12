@@ -111,6 +111,7 @@ var/global/datum/global_init/init = new ()
 		new /datum/random_map/noise/ore(null, 1, 1, 5, 64, 64)
 		// Update all turfs to ensure everything looks good post-generation. Yes,
 		// it's brute-forcey, but frankly the alternative is a mine turf rewrite.
+		new /datum/random_map/winding_dungeon(null,44,43,7,50,50)
 		for(var/turf/simulated/mineral/M in world) // Ugh.
 			M.updateMineralOverlays()
 		for(var/turf/simulated/floor/asteroid/M in world) // Uuuuuugh.

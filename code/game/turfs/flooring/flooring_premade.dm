@@ -28,6 +28,11 @@
 	icon_state = "grass0"
 	initial_flooring = /decl/flooring/grass
 
+/turf/simulated/floor/dirt
+	name = "dirt"
+	icon = 'icons/turf/flooring/asteroid.dmi'
+	icon_state = "asteroid"
+
 /turf/simulated/floor/carpet/blue
 	name = "blue carpet"
 	icon_state = "bcarpet"
