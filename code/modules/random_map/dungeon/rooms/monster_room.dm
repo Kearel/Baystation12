@@ -1,6 +1,6 @@
 //Monster room: Generates a room FILLED with monsters.
 /datum/random_room/monster_room
-	var/list/available_mobs = list(/mob/living/carbon/human = 1)
+	var/list/available_mobs = list(/mob/living/simple_animal/hostile/carp)
 
 /datum/random_room/monster_room/apply_to_map(var/xorigin,var/yorigin,var/zorigin)
 	if(available_mobs.len == 0) //no mobs no problem
@@ -15,3 +15,4 @@
 			var/type = pickweight(available_mobs)
 			var/mob/M = new type
 			M.loc = T
+	return 1

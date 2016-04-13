@@ -18,9 +18,9 @@
 */
 /datum/random_map/winding_dungeon
 	descriptor = "winding dungeon"
-	wall_type = /turf/simulated/mineral
+	wall_type = /turf/simulated/mineral/random/chance
 	floor_type = /turf/simulated/floor/dirt
-	var/room_wall_type = /turf/simulated/mineral
+	var/room_wall_type = /turf/simulated/mineral/random/chance
 	var/border_wall_type = /turf/unsimulated/mineral
 	var/door_type = /obj/structure/door/stone
 
@@ -33,13 +33,22 @@
 	var/corridor_max_length = 6
 	var/room_size_min = 4
 	var/room_size_max = 8
+	var/minimum_monsters = 8
+	var/maximum_monsters = 20
+	var/minimum_loot = 7
+	var/maximum_loot = 10
 
 	var/list/open_positions = list() //organized as: x:y
-	var/list/room_themes = list(/datum/room_theme/metal = 1)
+	var/list/room_themes = list(/datum/room_theme/metal = 1, /datum/room_theme = 3)
+	var/list/monsters = list()
 	var/list/rooms = list()
-
+	var/log = 0
 	limit_x = 50
 	limit_y = 50
+
+/datum/random_map/winding_dungeon/proc/logging(var/text)
+	if(log)
+		log_to_dd(text)
 
 /datum/random_map/winding_dungeon/apply_to_map()
 	for(var/datum/room/R in rooms)
@@ -48,7 +57,7 @@
 
 
 /datum/random_map/winding_dungeon/generate_map()
-
+	logging("Winding Dungeon Generation Start")
 	//first generate the border
 	for(var/xx = 1, xx <= limit_x, xx++)
 		map[get_map_cell(xx,1)] = BORDER_CHAR
@@ -58,13 +67,11 @@
 		map[get_map_cell(limit_x,yy)] = BORDER_CHAR
 
 	var/num_of_features = limit_x * limit_y / 100
-
+	logging("Number of features: [num_of_features]")
 	var/currentFeatures = 1
 	create_room(round(limit_x/2)+1,2,5,5,2)
-	var/cell = get_map_cell(round(limit_x/2)+1,2)
-	map[cell] = FLOOR_CHAR
-
-	for(var/sanity = 0, sanity < 1000, sanity++)
+	var/sanity = 0
+	for(sanity = 0, sanity < 1000, sanity++)
 		if(currentFeatures == num_of_features)
 			break
 		var/newx = 0
@@ -77,9 +84,12 @@
 				var/list/coords = splittext(pick(open_positions), ":")
 				newx = text2num(coords[1])
 				newy = text2num(coords[2])
+				open_positions -= "[newx]:[newy]"
+				logging("Picked coords ([newx],[newy]) from open_positions. Removing it. (length: [open_positions.len])")
 			else
 				newx = rand(1,limit_x)
 				newy = rand(1,limit_y)
+				logging("open_positions empty. Using randomly chosen coords ([newx],[newy])")
 			validTile = -1
 
 			if(map[get_map_cell(newx, newy)] == ARTIFACT_TURF_CHAR || map[get_map_cell(newx, newy)] == CORRIDOR_TURF_CHAR)
@@ -101,28 +111,37 @@
 					ymod = 0
 
 			if(map[get_map_cell(newx,newy+1)] == ARTIFACT_CHAR || map[get_map_cell(newx-1,newy)] == ARTIFACT_CHAR || map[get_map_cell(newx,newy-1)] == ARTIFACT_CHAR || map[get_map_cell(newx+1,newy)] == ARTIFACT_CHAR)
+				logging("Coords ([newx],[newy]) are too close to an ARTIFACT_CHAR position.")
 				validTile = -1
 
 			if(validTile > -1)
+				logging("Coords ([newx],[newy]) valid. xmod: [xmod], ymod: [ymod]. Attempts at creating a feature: [testing]")
 				break
-		open_positions -= "[newx]:[newy]"
 		if(validTile > -1)
 			if(rand(0,100) <= chance_of_room)
 				var/rw = rand(room_size_min,room_size_max)
 				var/rh = rand(room_size_min,room_size_max)
+				logging("Creating room of size [rw] by [rh]")
 				if(create_room(newx+xmod,newy+ymod,rw,rh,validTile))
 					currentFeatures++
 					if(rand(0,100) >= chance_of_room_empty)
 						create_room_features(newx+xmod,newy+ymod,rw,rh,validTile)
 					map[get_map_cell(newx,newy)] = FLOOR_CHAR
 					map[get_map_cell(newx+xmod,newy+ymod)] = ARTIFACT_CHAR
+				else
+					logging("Room invalid. Retrying")
 
 			else
+				logging("Creating corridor.")
 				if(create_corridor(newx+xmod,newy+ymod,validTile))
 					currentFeatures++
 					var/door = get_map_cell(newx,newy)
 					if(map[door] == ARTIFACT_TURF_CHAR)
 						map[door] = ARTIFACT_CHAR
+				else
+					logging("Corridor invalid.")
+	logging("Map completed. Loops: [sanity]")
+	open_positions.Cut()
 
 /datum/random_map/winding_dungeon/proc/create_corridor(var/cx, var/cy, var/dir)
 	var/length = rand(corridor_min_length,corridor_max_length)
@@ -155,6 +174,7 @@
 					map[get_map_cell(xtemp,ytemp)] = CORRIDOR_TURF_CHAR
 					if(!("[xtemp]:[ytemp]" in open_positions))
 						open_positions += "[xtemp]:[ytemp]"
+						logging("Adding \"[xtemp]:[ytemp]\" to open_positions (length: [open_positions.len])")
 	return 1
 
 /datum/random_map/winding_dungeon/proc/create_room(var/rx,var/ry, var/width, var/height, var/dir)
@@ -189,6 +209,7 @@
 						map[cell] = ARTIFACT_TURF_CHAR
 						if(!("[xtemp]:[ytemp]" in open_positions))
 							open_positions += "[xtemp]:[ytemp]"
+							logging("Adding \"[xtemp]:[ytemp]\" to open_positions (length: [open_positions.len])")
 					else
 						map[cell] = FLOOR_CHAR
 	return 1
@@ -216,6 +237,9 @@
 		return 0
 	rooms.Add(R)
 	return 1
+
+/datum/random_map/winding_dungeon/proc/add_loot(var/rox, var/roy, var/type)
+	//TODO
 
 /datum/random_map/winding_dungeon/get_appropriate_path(var/value)
 	switch(value)

@@ -2059,6 +2059,13 @@ area/space/atmosalert()
 	name = "\improper Telecommunications Power Control"
 	icon_state = "tcomsatwest"
 
+////////////////////////////////////////
+//*********CREVICE AREAS**************//
+////////////////////////////////////////
+/area/crevice_hub/main
+	name = "\improper The Crevice"
+	icon_state = "red"
+	lighting_use_dynamic = 0
 
 // Away Missions
 /area/awaymission
