@@ -1,9 +1,46 @@
 "a" = (/turf/unsimulated/mask,/area/mine/unexplored)
-"b" = (/turf/unsimulated/mineral,/area/crevice_hub/main)
-"c" = (/turf/simulated/floor/grass,/area/crevice_hub/main)
-"d" = (/turf/simulated/floor/dirt,/area/crevice_hub/main)
-"e" = (/obj/structure/flora/tree/pine,/turf/simulated/floor/grass,/area/crevice_hub/main)
-"f" = (/obj/effect/landmark{name = "JoinLate"},/turf/simulated/floor/dirt,/area/crevice_hub/main)
+"b" = (/turf/simulated/floor/dirt,/area/crevice_hub/main)
+"c" = (/turf/unsimulated/mask,/area/crevice_hub/main)
+"d" = (/turf/unsimulated/mineral,/area/crevice_hub/main)
+"e" = (/obj/machinery/door/unpowered/simple/cult,/turf/simulated/floor/dirt,/area/crevice_hub/main)
+"f" = (/turf/simulated/floor/grass,/area/crevice_hub/main)
+"g" = (/obj/structure/flora/tree/pine,/turf/simulated/floor/grass,/area/crevice_hub/main)
+"h" = (/obj/structure/table/reinforced,/obj/item/device/flashlight/lantern,/turf/simulated/floor/grass,/area/crevice_hub/main)
+"i" = (/obj/effect/landmark{name = "JoinLate"},/turf/simulated/floor/dirt,/area/crevice_hub/main)
+"j" = (/obj/structure/table/reinforced,/obj/item/device/flashlight/lantern,/turf/simulated/floor/dirt,/area/crevice_hub/main)
+"k" = (/obj/effect/landmark/start{name = "Station Engineer"},/turf/simulated/floor/grass,/area/crevice_hub/main)
+"l" = (/obj/effect/landmark/start{name = "Quartermaster"},/turf/simulated/floor/grass,/area/crevice_hub/main)
+"m" = (/obj/effect/landmark/start{name = "Internal Affairs Agent"},/turf/simulated/floor/grass,/area/crevice_hub/main)
+"n" = (/obj/effect/landmark/start{name = "Chaplain"},/turf/simulated/floor/grass,/area/crevice_hub/main)
+"o" = (/obj/effect/landmark/start{name = "Bartender"},/turf/simulated/floor/grass,/area/crevice_hub/main)
+"p" = (/obj/effect/landmark/start,/turf/simulated/floor/dirt,/area/crevice_hub/main)
+"q" = (/obj/effect/landmark/start{name = "Chief Engineer"},/turf/simulated/floor/grass,/area/crevice_hub/main)
+"r" = (/obj/effect/landmark/start{name = "AI"},/turf/simulated/floor/grass,/area/crevice_hub/main)
+"s" = (/obj/effect/landmark/start{name = "Geneticist"},/turf/simulated/floor/grass,/area/crevice_hub/main)
+"t" = (/obj/effect/landmark/start{name = "Medical Doctor"},/turf/simulated/floor/grass,/area/crevice_hub/main)
+"u" = (/obj/effect/landmark/start{name = "Scientist"},/turf/simulated/floor/grass,/area/crevice_hub/main)
+"v" = (/obj/effect/landmark/start{name = "Warden"},/turf/simulated/floor/grass,/area/crevice_hub/main)
+"w" = (/obj/effect/landmark/start{name = "Research Director"},/turf/simulated/floor/grass,/area/crevice_hub/main)
+"x" = (/obj/effect/landmark/start{name = "Janitor"},/turf/simulated/floor/grass,/area/crevice_hub/main)
+"y" = (/obj/effect/landmark/start{name = "Chef"},/turf/simulated/floor/grass,/area/crevice_hub/main)
+"z" = (/obj/effect/landmark/start{name = "Captain"},/turf/simulated/floor/grass,/area/crevice_hub/main)
+"A" = (/obj/effect/landmark/start{name = "Assistant"},/turf/simulated/floor/dirt,/area/crevice_hub/main)
+"B" = (/obj/effect/landmark/start{name = "Chief Medical Officer"},/turf/simulated/floor/grass,/area/crevice_hub/main)
+"C" = (/obj/effect/landmark/start{name = "Detective"},/turf/simulated/floor/grass,/area/crevice_hub/main)
+"D" = (/obj/effect/landmark/start{name = "Head of Personnel"},/turf/simulated/floor/grass,/area/crevice_hub/main)
+"E" = (/obj/effect/landmark/start{name = "Paramedic"},/turf/simulated/floor/grass,/area/crevice_hub/main)
+"F" = (/obj/effect/landmark/start{name = "Security Officer"},/turf/simulated/floor/grass,/area/crevice_hub/main)
+"G" = (/obj/effect/landmark/start{name = "Xenobiologist"},/turf/simulated/floor/grass,/area/crevice_hub/main)
+"H" = (/obj/effect/landmark/start{name = "Roboticist"},/turf/simulated/floor/grass,/area/crevice_hub/main)
+"I" = (/obj/effect/landmark/start{name = "Librarian"},/turf/simulated/floor/grass,/area/crevice_hub/main)
+"J" = (/obj/effect/landmark/start{name = "Chemist"},/turf/simulated/floor/grass,/area/crevice_hub/main)
+"K" = (/obj/effect/landmark/start{name = "Cargo Technician"},/turf/simulated/floor/grass,/area/crevice_hub/main)
+"L" = (/obj/effect/landmark/start{name = "Atmospheric Technician"},/turf/simulated/floor/dirt,/area/crevice_hub/main)
+"M" = (/obj/effect/landmark/start{name = "Cyborg"},/turf/simulated/floor/grass,/area/crevice_hub/main)
+"N" = (/obj/effect/landmark/start{name = "Gardener"},/turf/simulated/floor/grass,/area/crevice_hub/main)
+"O" = (/obj/effect/landmark/start{name = "Head of Security"},/turf/simulated/floor/grass,/area/crevice_hub/main)
+"P" = (/obj/effect/landmark/start{name = "Psychiatrist"},/turf/simulated/floor/grass,/area/crevice_hub/main)
+"Q" = (/obj/effect/landmark/start{name = "Shaft Miner"},/turf/simulated/floor/grass,/area/crevice_hub/main)
 
 (1,1,1) = {"
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
@@ -89,21 +126,21 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabcccccccccccdccccccccccbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabcccccccccccdccccccccccbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabcccccccccccdccccccccccbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabcccccccccccdccccccccccbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabcccceccccccdccccceccccbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabcccccccccccdccccccccccbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabccccccccccdfdcccccccccbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabddddddddddfffdddddddddbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabccccccccccdfdcccccccccbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabcccccccccccdccccccccccbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabcccceccccccdccccceccccbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabcccccccccccdccccccccccbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabcccccccccccdccccccccccbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacbcaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+dddddddddddddddddddddddddddddddddddddddddddddddddedddddddddddddddddddddddddddddddddddddddddddddddddd
+ddddddddddddddddddddddddddddddddddddddfffffffffffbffffffffffdddddddddddddddddddddddddddddddddddddddd
+ddddddddddddddddddddddddddddddddddddddfffffffffffbffffffffffdddddddddddddddddddddddddddddddddddddddd
+ddddddddddddddddddddddddddddddddddddddfffffffffffbffffffffffdddddddddddddddddddddddddddddddddddddddd
+ddddddddddddddddddddddddddddddddddddddfffffffffffbffffffffffdddddddddddddddddddddddddddddddddddddddd
+ddddddddddddddddddddddddddddddddddddddffffgffffffbfffffgffffdddddddddddddddddddddddddddddddddddddddd
+ddddddddddddddddddddddddddddddddddddddfffffffffffbffffffffffdddddddddddddddddddddddddddddddddddddddd
+ddddddddddddddddddddddddddddddddddddddfffffffffhbibhffffffffdddddddddddddddddddddddddddddddddddddddd
+ddddddddddddddddddddddddddddddddddddddbbbbbbbbbjiiijbbbbbbbbdddddddddddddddddddddddddddddddddddddddd
+ddddddddddddddddddddddddddddddddddddddfffffffffhbibhffffffffdddddddddddddddddddddddddddddddddddddddd
+ddddddddddddddddddddddddddddddddddddddfffffffffffbffffffffffdddddddddddddddddddddddddddddddddddddddd
+ddddddddddddddddddddddddddddddddddddddffffgfklmnopqrstugffffdddddddddddddddddddddddddddddddddddddddd
+ddddddddddddddddddddddddddddddddddddddffffffvwxyzABCDEFfffffdddddddddddddddddddddddddddddddddddddddd
+ddddddddddddddddddddddddddddddddddddddffffffGHIJKLMNOPQfffffdddddddddddddddddddddddddddddddddddddddd
+dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
 "}

@@ -45,7 +45,7 @@
 	var/turf/T = locate(xorigin+x-1,yorigin+y-1,zorigin)
 	if(!T)
 		return 0
-	if(ispath(door_type,/obj/structure/door))
+	if(ispath(door_type,/obj/machinery/door/unpowered/simple))
 		new door_type(T,null,lock_data)
 	else
 		new door_type(T)
@@ -58,5 +58,12 @@
 /datum/room_theme/metal
 	wall_type = /turf/simulated/wall
 	floor_type = /turf/simulated/floor/plating
-	door_type = /obj/structure/door/iron
+	door_type = /obj/machinery/door/unpowered/simple/iron
 	lock_complexity_max = 2
+	layout_chance = 30
+	room_layouts = list(/datum/random_room/mimic = 1, /datum/random_room/tomb = 1)
+
+/datum/room_theme/metal/secure
+	layout_chance = 100
+	lock_complexity_min = 2
+	lock_complexity_max = 5

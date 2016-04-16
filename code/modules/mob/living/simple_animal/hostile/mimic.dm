@@ -193,3 +193,33 @@ var/global/list/protected_objects = list(/obj/structure/table, /obj/structure/ca
 			if(prob(15))
 				L.Weaken(1)
 				L.visible_message("<span class='danger'>\the [src] knocks down \the [L]!</span>")
+
+
+
+//BASICALLY: Stays asleep until something attacks/hits it
+/mob/living/simple_animal/hostile/mimic/copy/sleeping
+	var/active = 0
+
+/mob/living/simple_animal/hostile/mimic/copy/sleeping/proc/wake_up()
+	if(!active)
+		active = 1
+		src.visible_message("\The [src] springs to life!")
+
+/mob/living/simple_animal/hostile/mimic/copy/sleeping/Life()
+	if(!active)
+		if(health <= 0) //since we still want to check this.
+			death()
+		return
+	..()
+
+/mob/living/simple_animal/hostile/mimic/copy/sleeping/attack_hand(mob/living/carbon/human/M as mob)
+	wake_up()
+	..()
+
+/mob/living/simple_animal/hostile/mimic/copy/sleeping/attackby(var/obj/item/O as obj, var/mob/user as mob)
+	wake_up()
+	..()
+
+/mob/living/simple_animal/hostile/mimic/copy/sleeping/attack_generic()
+	wake_up()
+	..()

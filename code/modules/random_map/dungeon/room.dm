@@ -78,7 +78,18 @@ If its complexity is lower than our theme's then
 			room_theme = null
 	if(room_generator)
 		room_generator.apply_to_map(xorigin,yorigin,zorigin)
-		qdel(room_generator)
-		room_generator = null
 
+	return 1
+
+/datum/room/proc/add_loot(var/xorigin,var/yorigin,var/zorigin,var/type)
+	if(room_generator && room_generator.apply_loot(xorigin,yorigin,zorigin,type))
+		return 1
+	var/rx = xorigin+x+rand(width-3)
+	var/ry = yorigin+y+rand(height-3)
+	var/turf/T = locate(rx,ry,zorigin)
+	if(!T || T.density)
+		return 0
+	for(var/obj/o in T)
+		return 0
+	new type(T)
 	return 1

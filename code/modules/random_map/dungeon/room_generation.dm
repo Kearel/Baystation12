@@ -15,3 +15,6 @@
 
 /datum/random_room/proc/apply_to_map(var/xorigin = 1,var/yorigin = 1,var/zorigin = 1)
 	return 1
+
+/datum/random_room/proc/apply_loot(var/xorigin = 1,var/yorigin = 1,var/zorigin = 1, var/type)
+	return 1
