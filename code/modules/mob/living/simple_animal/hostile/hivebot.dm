@@ -87,13 +87,15 @@
 		visible_message("\red The [src] turns on!")
 		while(bot_amt > 0)
 			bot_amt--
+			var/mob/M
 			switch(bot_type)
 				if("norm")
-					new /mob/living/simple_animal/hostile/hivebot(get_turf(src))
+					M = new /mob/living/simple_animal/hostile/hivebot(get_turf(src))
 				if("range")
-					new /mob/living/simple_animal/hostile/hivebot/range(get_turf(src))
+					M = new /mob/living/simple_animal/hostile/hivebot/range(get_turf(src))
 				if("rapid")
-					new /mob/living/simple_animal/hostile/hivebot/rapid(get_turf(src))
+					M = new /mob/living/simple_animal/hostile/hivebot/rapid(get_turf(src))
+			M.faction = faction
 		spawn(100)
 			qdel(src)
 		return

@@ -34,9 +34,10 @@
 	var/monster_multiplier = 1
 	var/loot_multiplier = 1
 
-	var/first_room_x = 50
+	var/first_room_x = 45
 	var/first_room_y = 1
-	var/first_room_dir
+	var/first_room_width = 10
+	var/first_room_height = 10
 
 	var/monster_faction = "dungeon" //if set, factions of the mobs spawned will be set to this.
 	//without this they will attack each other.
@@ -46,13 +47,17 @@
 	var/list/monsters = list()
 	var/list/loot = list(/obj/item/stack/medical/bruise_pack = 10, /obj/item/stack/medical/ointment = 10, /obj/item/stack/medical/advanced/bruise_pack = 2, /obj/item/stack/medical/advanced/ointment = 2, /obj/item/stack/medical/splint = 15)
 	var/list/rooms = list()
-	var/log = 1
+	var/log = 0
 	limit_x = 50
 	limit_y = 50
 
 /datum/random_map/winding_dungeon/New(var/seed, var/tx, var/ty, var/tz, var/tlx, var/tly, var/do_not_apply, var/do_not_announce, var/room_x, var/room_y, var/room_width, var/room_height)
 	loot += subtypesof(/obj/item/weapon/reagent_containers/food) + subtypesof(/obj/item/weapon/material) + subtypesof(/obj/item/weapon/melee)
 	monsters += subtypesof(/mob/living/simple_animal/hostile) - /mob/living/simple_animal/hostile/retaliate - /mob/living/simple_animal/hostile/commanded - typesof(/mob/living/simple_animal/hostile/mimic)
+	first_room_x = room_x
+	first_room_y = room_y
+	first_room_width = room_width
+	first_room_height = room_height
 	..()
 
 /datum/random_map/winding_dungeon/proc/logging(var/text)

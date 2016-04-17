@@ -162,6 +162,9 @@
 			close()
 		return
 
+	if(lock && lock.isLocked())
+		user << "\The [src] is locked!"
+
 	return
 
 /obj/machinery/door/unpowered/simple/examine(mob/user)

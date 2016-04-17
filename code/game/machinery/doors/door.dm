@@ -72,6 +72,8 @@
 /obj/machinery/door/Destroy()
 	density = 0
 	update_nearby_tiles()
+	qdel(lock)
+	lock = null
 	..()
 	return
 
