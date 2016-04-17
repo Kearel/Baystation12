@@ -27,6 +27,8 @@
 	var/corpseidaccess = null //This is for access. See access.dm for which jobs give what access. Again, put in quotes. Use "Captain" if you want it to be all access.
 	var/corpseidicon = null //For setting it to be a gold, silver, centcomm etc ID
 	var/species = null
+	var/skeletize = 0 //whether to skeletize the corpse
+	var/husk = 0 //whether to husk the corpse
 
 /obj/effect/landmark/mobcorpse/New()
 	createCorpse()
@@ -36,6 +38,10 @@
 	M.set_species(species)
 	M.real_name = src.name
 	M.death(0)
+	if(skeletize)
+		M.ChangeToSkeleton()
+	if(husk)
+		M.ChangeToHusk()
 	if(src.corpseuniform)
 		M.equip_to_slot_or_del(new src.corpseuniform(M), slot_w_uniform)
 	if(src.corpsesuit)

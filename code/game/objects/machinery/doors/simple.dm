@@ -176,6 +176,11 @@
 		return 0
 	return 1
 
+/obj/machinery/door/unpowered/simple/Destroy()
+	qdel(lock)
+	lock = null
+	..()
+
 /obj/machinery/door/unpowered/simple/iron/New(var/newloc,var/material_name,var/complexity)
 	..(newloc, "iron", complexity)
 
