@@ -63,7 +63,10 @@ var/global/list/map_count = list()
 
 	for(var/i = 0;i<max_attempts;i++)
 		if(generate())
-			if(!do_not_announce) admin_notice("<span class='danger'>[capitalize(name)] generation completed in [round(0.1*(world.timeofday-start_time),0.1)] seconds.</span>", R_DEBUG)
+			if(!do_not_announce)
+				admin_notice("<span class='danger'>[capitalize(name)] generation completed in [round(0.1*(world.timeofday-start_time),0.1)] seconds.</span>", R_DEBUG)
+				log_to_dd("[capitalize(name)] generation completed in [round(0.1*(world.timeofday-start_time),0.1)] seconds.")//curious
+
 			return
 	if(!do_not_announce) admin_notice("<span class='danger'>[capitalize(name)] failed to generate ([round(0.1*(world.timeofday-start_time),0.1)] seconds): could not produce sane map.</span>", R_DEBUG)
 

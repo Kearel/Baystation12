@@ -53,7 +53,7 @@
 
 /datum/random_map/winding_dungeon/New(var/seed, var/tx, var/ty, var/tz, var/tlx, var/tly, var/do_not_apply, var/do_not_announce, var/room_x, var/room_y, var/room_width, var/room_height)
 	loot += subtypesof(/obj/item/weapon/reagent_containers/food) + subtypesof(/obj/item/weapon/material) + subtypesof(/obj/item/weapon/melee)
-	monsters += subtypesof(/mob/living/simple_animal/hostile) - /mob/living/simple_animal/hostile/retaliate - /mob/living/simple_animal/hostile/commanded - typesof(/mob/living/simple_animal/hostile/mimic)
+	monsters += subtypesof(/mob/living/simple_animal/hostile) - /mob/living/simple_animal/hostile/retaliate - typesof(/mob/living/simple_animal/hostile/commanded) - typesof(/mob/living/simple_animal/hostile/mimic)
 	first_room_x = room_x
 	first_room_y = room_y
 	first_room_width = room_width
@@ -65,7 +65,10 @@
 		log_to_dd(text)
 
 /datum/random_map/winding_dungeon/apply_to_map()
+	logging("You have [rooms.len] # of rooms")
 	for(var/datum/room/R in rooms)
+		if(!priority_process)
+			sleep(-1)
 		R.apply_to_map(origin_x,origin_y,origin_z,src)
 	..()
 	var/num_of_loot = round(limit_x * limit_y / 75)
@@ -74,6 +77,8 @@
 	logging("Attempting to add [num_of_monsters] # of monsters")
 	var/sanity = 0
 	while(rooms.len && num_of_loot > 0)
+		if(!priority_process)
+			sleep(-1)
 		var/datum/room/R = pick(rooms)
 		if(R.add_loot(origin_x,origin_y,origin_z,pickweight(loot)))
 			num_of_loot--
@@ -86,6 +91,8 @@
 
 	sanity = 0
 	while(num_of_monsters > 0)
+		if(!priority_process)
+			sleep(-1)
 		var/x = rand(origin_x,origin_x+limit_x)
 		var/y = rand(origin_y,origin_y+limit_y)
 		var/turf/T = locate(x,y,origin_z)
@@ -109,6 +116,9 @@
 		if(sanity > 1000)
 			logging("Sanity limit reached on monster spawning #[num_of_monsters]")
 			num_of_monsters = 0
+	for(var/datum/room/R in rooms)
+		rooms -= R
+		qdel(R)
 
 /datum/random_map/winding_dungeon/generate_map()
 	logging("Winding Dungeon Generation Start")
@@ -123,9 +133,13 @@
 	var/num_of_features = limit_x * limit_y * features_multiplier
 	logging("Number of features: [num_of_features]")
 	var/currentFeatures = 1
-	create_room(round(limit_x/2)+1,2,5,5,2)
+	var/result = carve_area(first_room_x,first_room_y,first_room_width,first_room_height, FLOOR_CHAR, ARTIFACT_TURF_CHAR)
+	logging("First room result: [result ? "Success" : "Failure"]")
 	var/sanity = 0
-	for(sanity = 0, sanity < round(10/(features_multiplier)), sanity++) //basically for 1% we want 1000 tries total. It should never reach that.
+	for(sanity = 0, sanity < 1000, sanity++)
+		if(!priority_process)
+			sleep(-1)
+
 		if(currentFeatures == num_of_features)
 			break
 		/* WHAT THIS CODE IS DOING:
@@ -224,8 +238,8 @@
 				map[get_map_cell(newx,newy)] = FLOOR_CHAR
 				map[get_map_cell(newx+doorx,newy+doory)] = ARTIFACT_CHAR
 				if(rand(0,100) >= chance_of_room_empty)
-					create_room_features(round(newx+xmod),round(newy+ymod),width,height)
-					logging("Attempted room feature creation")
+					var/room_result = create_room_features(round(newx+xmod),round(newy+ymod),width,height)
+					logging("Attempted room feature creation: [room_result ? "Success" : "Failure"]")
 			else
 				logging("Creating corridor.")
 				var/door = get_map_cell(newx,newy)
@@ -258,85 +272,13 @@
 						map[get_map_cell(xtemp,ytemp)] = char
 	return 1
 
-/*
-/datum/random_map/winding_dungeon/proc/create_corridor(var/cx, var/cy, var/dir)
-	var/length = rand(corridor_min_length,corridor_max_length)
-	var/width = 1
-	var/height = 1
-	var/truex = cx
-	var/truey = cy
-	switch(dir)
-		if(0)
-			height = length
-			truey = cy - length + 1
-		if(1)
-			width = length
-		if(2)
-			height = length
-		if(3)
-			width = length
-			truex = cx - length + 1
-	for(var/mode = 0, mode <= 1, mode++)
-		for(var/ytemp = truey, ytemp < truey + height, ytemp++)
-			if(ytemp < 0 || ytemp > limit_y)
-				return 0
-			for(var/xtemp = truex, xtemp < truex + width, xtemp++)
-				if(!mode)
-					if(xtemp < 0 || xtemp > limit_x)
-						return 0
-					if(map[get_map_cell(xtemp,ytemp)] != WALL_CHAR)
-						return 0
-				else
-					map[get_map_cell(xtemp,ytemp)] = CORRIDOR_TURF_CHAR
-					if(!("[xtemp]:[ytemp]" in open_positions))
-						open_positions += "[xtemp]:[ytemp]"
-						logging("Adding \"[xtemp]:[ytemp]\" to open_positions (length: [open_positions.len])")
-	return 1
-*/
-/datum/random_map/winding_dungeon/proc/create_room(var/rx,var/ry, var/width, var/height, var/dir)
-	var/truex = 0
-	var/truey = 0
-	switch(dir)
-		if(0)
-			truey = ry - height + 1
-			truex = round(rx-width/2)
-		if(1)
-			truex = rx
-			truey = round(ry-height/2)
-		if(2)
-			truex = round(rx-width/2)
-			truey = ry
-		if(3)
-			truex = rx-width + 1
-			truey = round(ry-height/2)
-	for(var/mode = 0, mode <= 1, mode++)
-		for(var/ytemp = truey, ytemp < truey + height, ytemp++)
-			if(ytemp < 1 || ytemp > limit_y)
-				return 0
-			for(var/xtemp = truex, xtemp < truex + width, xtemp++)
-				if(!mode)
-					if(xtemp < 1 || xtemp > limit_x)
-						return 0
-					if(map[get_map_cell(xtemp,ytemp)] != WALL_CHAR)
-						return 0
-				else
-					var/cell = get_map_cell(xtemp,ytemp)
-					if(xtemp == truex || xtemp == truex+width-1| ytemp == truey || ytemp == truey+height-1)
-						map[cell] = ARTIFACT_TURF_CHAR
-						if(!("[xtemp]:[ytemp]" in open_positions))
-							open_positions += "[xtemp]:[ytemp]"
-							logging("Adding \"[xtemp]:[ytemp]\" to open_positions (length: [open_positions.len])")
-					else
-						map[cell] = FLOOR_CHAR
-	return 1
-
 /datum/random_map/winding_dungeon/proc/create_room_features(var/rox,var/roy,var/width,var/height)
 	var/theme_type = pickweight(room_themes)
 	var/room_theme = new theme_type(origin_x,origin_y,origin_z)
 	var/datum/room/R = new(room_theme,rox,roy,width,height,rand(0,100) <= chance_of_door)
 	if(!R)
 		return 0
-	rooms.Add(R)
+	rooms += R
 	return 1
 
 /datum/random_map/winding_dungeon/proc/add_loot(var/xorigin,var/yorigin,var/zorigin,var/type)
