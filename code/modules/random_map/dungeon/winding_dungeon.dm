@@ -44,16 +44,25 @@
 
 	var/list/open_positions = list() //organized as: x:y
 	var/list/room_themes = list(/datum/room_theme/metal = 1, /datum/room_theme = 3, /datum/room_theme/metal/secure = 1)
-	var/list/monsters = list()
-	var/list/loot = list(/obj/item/stack/medical/bruise_pack = 10, /obj/item/stack/medical/ointment = 10, /obj/item/stack/medical/advanced/bruise_pack = 2, /obj/item/stack/medical/advanced/ointment = 2, /obj/item/stack/medical/splint = 15)
+	var/list/monsters_common = list()
+	var/list/monsters_uncommon = list()
+	var/list/monsters_rare = list()
+	var/list/loot_common = list()
+	var/list/loot_uncommon = list()
+	var/list/loot_rare = list()
+
 	var/list/rooms = list()
 	var/log = 0
 	limit_x = 50
 	limit_y = 50
 
 /datum/random_map/winding_dungeon/New(var/seed, var/tx, var/ty, var/tz, var/tlx, var/tly, var/do_not_apply, var/do_not_announce, var/room_x, var/room_y, var/room_width, var/room_height)
-	loot += subtypesof(/obj/item/weapon/reagent_containers/food) + subtypesof(/obj/item/weapon/material) + subtypesof(/obj/item/weapon/melee)
-	monsters += subtypesof(/mob/living/simple_animal/hostile) - /mob/living/simple_animal/hostile/retaliate - typesof(/mob/living/simple_animal/hostile/commanded) - typesof(/mob/living/simple_animal/hostile/mimic)
+	loot_common += subtypesof(/obj/item/weapon/reagent_containers/food) + subtypesof(/obj/item/weapon/material) + subtypesof(/obj/item/weapon/melee)
+	loot_uncommon += subtypesof(/obj/item/weapon/gun/projectile) + subtypesof(/obj/item/ammo_magazine)
+	loot_rare += subtypesof(/obj/mecha)
+	monsters_common += typesof(/mob/living/simple_animal/hostile/carp)
+	monsters_uncommon += typesof(/mob/living/simple_animal/hostile/hivebot)
+	monsters_rare += typesof(/mob/living/simple_animal/hostile/syndicate) + typesof(/mob/living/simple_animal/hostile/pirate)
 	first_room_x = room_x
 	first_room_y = room_y
 	first_room_width = room_width
@@ -63,6 +72,16 @@
 /datum/random_map/winding_dungeon/proc/logging(var/text)
 	if(log)
 		log_to_dd(text)
+
+/datum/random_map/winding_dungeon/proc/get_appropriate_list(var/list/common, var/list/uncommon, var/list/rare, var/x, var/y)
+	var/distance = sqrt((x - round(first_room_x+first_room_width/2)) ** 2 + (y - round(first_room_y+first_room_height/2)) ** 2)
+	if(prob(distance))
+		if(prob(distance/100) && rare && rare.len)
+			return rare
+		else if(uncommon && uncommon.len)
+			return uncommon
+	return common
+
 
 /datum/random_map/winding_dungeon/apply_to_map()
 	logging("You have [rooms.len] # of rooms")
@@ -80,7 +99,8 @@
 		if(!priority_process)
 			sleep(-1)
 		var/datum/room/R = pick(rooms)
-		if(R.add_loot(origin_x,origin_y,origin_z,pickweight(loot)))
+		var/list/loot_list = get_appropriate_list(loot_common, loot_uncommon, loot_rare, round(R.x+R.width/2), round(R.y+R.height/2))
+		if(R.add_loot(origin_x,origin_y,origin_z,pickweight(loot_list)))
 			num_of_loot--
 			sanity -= 10 //we hahve success so more tries
 			continue
@@ -104,7 +124,8 @@
 				canDo = 0
 				break
 			if(canDo)
-				var/type = pickweight(monsters)
+				var/list/monster_list = get_appropriate_list(monsters_common, monsters_uncommon, monsters_rare, T.x, T.y)
+				var/type = pickweight(monster_list)
 				logging("Generating a monster of type [type]")
 				var/mob/M = new type(T)
 				if(monster_faction)
