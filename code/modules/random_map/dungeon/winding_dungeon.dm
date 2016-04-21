@@ -44,6 +44,9 @@
 
 	var/list/open_positions = list() //organized as: x:y
 	var/list/room_themes = list(/datum/room_theme/metal = 1, /datum/room_theme = 3, /datum/room_theme/metal/secure = 1)
+	var/list/room_theme_common = list(/datum/room_theme = 1)
+	var/list/room_theme_uncommon = list(/datum/room_theme/metal = 1, /datum/room_theme = 3)
+	var/list/room_theme_rare = list(/datum/room_theme/metal = 1, /datum/room_theme = 3, /datum/room_theme/metal/secure = 1)
 	var/list/monsters_common = list()
 	var/list/monsters_uncommon = list()
 	var/list/monsters_rare = list()
@@ -294,7 +297,8 @@
 	return 1
 
 /datum/random_map/winding_dungeon/proc/create_room_features(var/rox,var/roy,var/width,var/height)
-	var/theme_type = pickweight(room_themes)
+	var/list/room_list = get_appropriate_list(room_theme_common, room_theme_uncommon, room_theme_rare, round(rox+width/2), round(roy+height/2))
+	var/theme_type = pickweight(room_list)
 	var/room_theme = new theme_type(origin_x,origin_y,origin_z)
 	var/datum/room/R = new(room_theme,rox,roy,width,height,rand(0,100) <= chance_of_door)
 	if(!R)
