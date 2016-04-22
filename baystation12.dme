@@ -1664,6 +1664,7 @@
 #include "code\modules\random_map\drop\droppod.dm"
 #include "code\modules\random_map\drop\droppod_doors.dm"
 #include "code\modules\random_map\drop\supply.dm"
+#include "code\modules\random_map\dungeon\abandoned.dm"
 #include "code\modules\random_map\dungeon\room.dm"
 #include "code\modules\random_map\dungeon\room_generation.dm"
 #include "code\modules\random_map\dungeon\room_theme.dm"

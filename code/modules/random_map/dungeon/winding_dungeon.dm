@@ -21,7 +21,6 @@
 	floor_type = /turf/simulated/floor/dirt
 	var/room_wall_type = /turf/simulated/mineral/random/chance
 	var/border_wall_type = /turf/unsimulated/mineral
-	var/door_type = /obj/machinery/door/unpowered/simple/sandstone
 
 	target_turf_type = /turf/unsimulated/mask
 
@@ -47,7 +46,7 @@
 	var/list/room_theme_common = list(/datum/room_theme = 1)
 	var/list/room_theme_uncommon = list(/datum/room_theme/metal = 1, /datum/room_theme = 3)
 	var/list/room_theme_rare = list(/datum/room_theme/metal = 1, /datum/room_theme = 3, /datum/room_theme/metal/secure = 1)
-	var/list/monsters_common = list()
+	var/list/monsters_common = list(/mob/living/simple_animal/hostile/carp = 50, /mob/living/simple_animal/hostile/carp/pike = 1)
 	var/list/monsters_uncommon = list()
 	var/list/monsters_rare = list()
 	var/list/loot_common = list()
@@ -63,7 +62,6 @@
 	loot_common += subtypesof(/obj/item/weapon/reagent_containers/food) + subtypesof(/obj/item/weapon/material) + subtypesof(/obj/item/weapon/melee)
 	loot_uncommon += subtypesof(/obj/item/weapon/gun/projectile) + subtypesof(/obj/item/ammo_magazine)
 	loot_rare += subtypesof(/obj/mecha)
-	monsters_common += typesof(/mob/living/simple_animal/hostile/carp)
 	monsters_uncommon += typesof(/mob/living/simple_animal/hostile/hivebot)
 	monsters_rare += typesof(/mob/living/simple_animal/hostile/syndicate) + typesof(/mob/living/simple_animal/hostile/pirate)
 	first_room_x = room_x

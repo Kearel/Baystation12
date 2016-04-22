@@ -43,6 +43,11 @@
 	if(!door_type)
 		return 0
 	var/turf/T = locate(xorigin+x-1,yorigin+y-1,zorigin)
+	for(var/i = -1; i <= 1; i++)
+		for(var/j = -1; j <= 1; j++)
+			var/turf/check = locate(T.x + i, T.y + j, T.z)
+			for(var/atom/movable/M in check.contents)
+				return 0
 	if(!T)
 		return 0
 	if(ispath(door_type,/obj/machinery/door/unpowered/simple))
