@@ -117,6 +117,13 @@
 
 /obj/machinery/door/unpowered/simple/attackby(obj/item/I as obj, mob/user as mob)
 	src.add_fingerprint(user)
+	if(istype(I, /obj/item/weapon/key) && lock)
+		var/obj/item/weapon/key/K = I
+		if(!lock.toggle(K.key_data))
+			user << "<span class='warning'>\The [K] does not fit in the lock!</span>"
+		return
+	if(lock && lock.pick_lock(I,src,user))
+		return
 
 	if(istype(I, /obj/item/stack/material) && I.get_material_name() == src.get_material_name())
 		if(stat & BROKEN)
