@@ -34,7 +34,7 @@
 	if(initial_lock_value)
 		locked = initial_lock_value
 	if(locked)
-		lock = new(locked)
+		lock = new(src,locked)
 
 	if(material.opacity < 0.5)
 		set_opacity(0)

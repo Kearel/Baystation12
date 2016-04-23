@@ -5,12 +5,18 @@
 /datum/lock
 	var/status = 1 //unlocked, 1 == locked 2 == broken
 	var/lock_data = "" //basically a randomized string. The longer the string the more complex the lock.
+	var/atom/holder
 
-/datum/lock/New(var/complexity = 1)
+/datum/lock/New(var/atom/h, var/complexity = 1)
+	holder = h
 	if(istext(complexity))
 		lock_data = complexity
 	else
 		lock_data = generateRandomString(complexity)
+
+/datum/lock/Destroy()
+	holder = null
+	..()
 
 /datum/lock/proc/unlock(var/key = "")
 	if(status ^ LOCKED)
@@ -42,7 +48,7 @@
 /datum/lock/proc/isLocked()
 	return status & LOCKED
 
-/datum/lock/proc/pick_lock(var/obj/item/I,var/atom/target, var/mob/user)
+/datum/lock/proc/pick_lock(var/obj/item/I, var/mob/user)
 	if(!istype(I) && (status ^ LOCKED))
 		return
 	var/unlock_power = 0
@@ -52,13 +58,13 @@
 		unlock_power = 3
 	if(!unlock_power)
 		return
-	user.visible_message("\The [user] takes out \the [I], picking \the [target]'s lock.")
-	if(!do_after(user, 20, target))
+	user.visible_message("\The [user] takes out \the [I], picking \the [holder]'s lock.")
+	if(!do_after(user, 20, holder))
 		return
 	if(prob(20*(unlock_power/getComplexity())))
-		user << "<span class='notice'>You pick open \the [target]'s lock!</span>"
+		user << "<span class='notice'>You pick open \the [holder]'s lock!</span>"
 		unlock(lock_data)
 		return
 	else if(prob(5 * unlock_power))
-		user << "<span class='warning'>You accidently break \the [target]'s lock with your [I]!</span>"
+		user << "<span class='warning'>You accidently break \the [holder]'s lock with your [I]!</span>"
 		status |= BROKEN
