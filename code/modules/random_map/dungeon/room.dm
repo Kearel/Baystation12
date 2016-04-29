@@ -33,7 +33,7 @@ If its complexity is lower than our theme's then
 	if(room_generator)
 		qdel(room_generator)
 		room_generator = null
-	..()
+	return ..()
 
 /datum/room/proc/apply_to_map(var/xorigin,var/yorigin,var/zorigin, var/datum/random_map/map)
 	if(room_theme)
