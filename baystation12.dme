@@ -1508,6 +1508,7 @@
 #include "code\modules\modular_computers\file_system\programs\card.dm"
 #include "code\modules\modular_computers\file_system\programs\comm.dm"
 #include "code\modules\modular_computers\file_system\programs\configurator.dm"
+#include "code\modules\modular_computers\file_system\programs\crew_manifest.dm"
 #include "code\modules\modular_computers\file_system\programs\file_browser.dm"
 #include "code\modules\modular_computers\file_system\programs\news_browser.dm"
 #include "code\modules\modular_computers\file_system\programs\ntdownloader.dm"
