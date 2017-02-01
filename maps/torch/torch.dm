@@ -49,6 +49,7 @@
 	#include "../shared/exodus_torch/loadout/loadout_shoes.dm"
 	#include "../shared/exodus_torch/loadout/loadout_suit.dm"
 	#include "../shared/exodus_torch/loadout/loadout_accessories.dm"
+	#include "../shared/exodus_torch/loadout/loadout_xeno.dm"
 
 	#include "torch-1.dmm"
 	#include "torch-2.dmm"
@@ -60,6 +61,7 @@
 	#include "torch-8.dmm"
 	#include "torch-9.dmm"
 	#include "torch-10.dmm"
+	#include "torch-11.dmm"
 
 	#include "../../code/modules/lobby_music/chasing_time.dm"
 	#include "../../code/modules/lobby_music/absconditus.dm"
