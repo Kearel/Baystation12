@@ -18,27 +18,33 @@
 	user.drop_from_inventory(src)
 	squish()
 
-/obj/item/weapon/slugegg/HasProximity(atom/movable/AM as mob|obj)
-	if(istype(AM,/mob))
+/obj/item/weapon/slugegg/HasProximity(var/atom/movable/AM)
+	if(isliving(AM))
 		if(istype(AM,/mob/living/carbon/human))
 			var/mob/living/carbon/human/H = AM
-			if(H.species && H.species.get_bodytype(H) == "Vox")
+			world << H.species.get_bodytype() == "Vox" ? "Yes" : "No"
+			if(H.species && H.species.get_bodytype() == "Vox")
+				return
+		else
+			var/mob/living/L = AM
+			if(L.faction == "Vox")
 				return
 		squish()
 
 /obj/item/weapon/slugegg/proc/squish()
 	src.visible_message("<span class='warning'>\The [src] bursts open!</span>")
-	new /mob/living/simple_animal/mouse(get_turf(src))
+	new /mob/living/simple_animal/hostile/voxslug(get_turf(src))
 	playsound(src.loc,'sound/effects/attackblob.ogg',100, 1)
 	qdel(src)
 
-//a slug sling basically launches a small egg that hatches (either on a person or on the floor), releasing a terrible blood sucking creature.
-//Balanced due to the non-spammy nature of the gun, as well as the frailty of the creatures and their wanton bloodlust.
+//a slug sling basically launches a small egg that hatches (either on a person or on the floor), releasing a terrible blood thirsty monster.
+//Balanced due to the non-spammy nature of the gun, as well as the frailty of the creatures.
 /obj/item/weapon/gun/launcher/alien/slugsling
 	name = "slug sling"
 	desc = "A bulbous looking rifle. It feels like holding a plastic bag full of meat."
 	w_class = ITEM_SIZE_LARGE
 	icon_state = "slugsling"
+	item_state = "spikethrower"
 	fire_sound_text = "a strange noise"
 	fire_sound = 'sound/weapons/towelwhip.ogg'
 	release_force = 6
