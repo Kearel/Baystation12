@@ -443,6 +443,7 @@
 	Should the next-in-stack number be higher than the current number of items in the stack, it will loop around to one. \
 	ref found pulses when the tile finds something. This should always happen unless the area where the assembly is has nothing on it. \
 	If nothing is found, nothing updates."
+	icon_state = "tile"
 	complexity = 8
 	size = 3
 	cooldown_per_use = 2 SECONDS
