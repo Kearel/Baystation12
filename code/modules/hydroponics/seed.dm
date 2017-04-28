@@ -705,12 +705,15 @@
 			if(user.has_aspect(ASPECT_GREENTHUMB))
 				total_yield = round(total_yield*1.5)
 
+		. = list()
 		for(var/i = 0;i<total_yield;i++)
 			var/obj/item/product
 			if(has_mob_product)
 				product = new has_mob_product(get_turf(user),name)
 			else
 				product = new /obj/item/weapon/reagent_containers/food/snacks/grown(get_turf(user),name)
+			. += product
+				
 			if(get_trait(TRAIT_PRODUCT_COLOUR))
 				if(!istype(product, /mob))
 					product.color = get_trait(TRAIT_PRODUCT_COLOUR)

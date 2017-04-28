@@ -54,6 +54,7 @@ var/const/HOLOPAD_MODE = RANGE_BASED
 	var/last_message
 
 /obj/machinery/hologram/holopad/New()
+	..()
 	desc = "It's a floor-mounted device for projecting holographic images. Its ID is '[loc.loc]'"
 
 /obj/machinery/hologram/holopad/attack_hand(var/mob/living/carbon/human/user) //Carn: Hologram requests.
@@ -67,7 +68,7 @@ var/const/HOLOPAD_MODE = RANGE_BASED
 		take_call(user)
 		return
 	else if(caller_id && !incoming_connection)
-		visible_message("Severing connection to distant holopad.")
+		audible_message("Severing connection to distant holopad.")
 		end_call(user)
 		return
 	switch(alert(user,"Would you like to request an AI's presence or establish communications with another pad?", "Holopad","AI","Holocomms","Cancel"))
@@ -97,8 +98,14 @@ var/const/HOLOPAD_MODE = RANGE_BASED
 				if(targetpad==src)
 					to_chat(user, "<span class='info'>Using such sophisticated technology, just to talk to yourself seems a bit silly.</span>")
 					return
+				if(targetpad && targetpad.caller_id)
+					to_chat(user, "<span class='info'>The pad flashes a busy sign. Maybe you should try again later..</span>")
+					return
 				if(targetpad)
 					make_call(targetpad, user)
+			else
+				to_chat(user, "<span class='notice'>A request for holographic communication was already sent recently.</span>")
+
 
 /obj/machinery/hologram/holopad/proc/make_call(var/obj/machinery/hologram/holopad/targetpad, var/mob/living/carbon/user)
 	targetpad.last_request = world.time
@@ -122,10 +129,8 @@ var/const/HOLOPAD_MODE = RANGE_BASED
 /obj/machinery/hologram/holopad/proc/end_call(mob/user)
 	caller_id.unset_machine()
 	caller_id.reset_view() //Send the caller back to his body
-	clear_holo(caller_id) // destroy the hologram
-	caller_id = null //Reset caller_id
-	sourcepad.targetpad = null
-	sourcepad = null //Reset source
+	clear_holo(0, caller_id) // destroy the hologram
+	caller_id = null
 
 /obj/machinery/hologram/holopad/check_eye(mob/user)
 	return 0
@@ -145,20 +150,20 @@ var/const/HOLOPAD_MODE = RANGE_BASED
 	return
 
 /obj/machinery/hologram/holopad/proc/activate_holo(mob/living/silicon/ai/user)
-	if(!(stat & NOPOWER) && user.eyeobj.loc == src.loc)//If the projector has power and client eye is on it
+	if(!(stat & NOPOWER) && user.eyeobj && user.eyeobj.loc == src.loc)//If the projector has power and client eye is on it
 		if (user.holo)
 			to_chat(user, "<span class='danger'>ERROR:</span> Image feed in progress.")
 			return
-		create_holo(user)//Create one.
 		src.visible_message("A holographic image of [user] flicks to life right before your eyes!")
+		create_holo(user)//Create one.
 	else
 		to_chat(user, "<span class='danger'>ERROR:</span> Unable to project hologram.")
 	return
 
 /obj/machinery/hologram/holopad/proc/activate_holocall(mob/living/carbon/caller_id)
 	if(caller_id)
-		create_holo(0,caller_id)//Create one.
 		src.visible_message("A holographic image of [caller_id] flicks to life right before your eyes!")
+		create_holo(0,caller_id)//Create one.
 	else
 		to_chat(caller_id, "<span class='danger'>ERROR:</span> Unable to project hologram.")
 	return
@@ -230,6 +235,9 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 		hologram.overlays += getHologramIcon(icon(tempicon)) // Add the callers image as an overlay to keep coloration!
 	else
 		hologram.overlays += A.holo_icon // Add the AI's configured holo Icon
+	if(A)
+		if(A.holo_icon_malf == TRUE)
+			hologram.overlays += icon("icons/effects/effects.dmi", "malf-scanline")
 	hologram.mouse_opacity = 0//So you can't click on it.
 	hologram.plane = ABOVE_HUMAN_PLANE
 	hologram.layer = ABOVE_HUMAN_LAYER //Above all the other objects/mobs. Or the vast majority of them.
@@ -260,8 +268,8 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 		set_light(0)			//pad lighting (hologram lighting will be handled automatically since its owner was deleted)
 		icon_state = "holopad0"
 		if(sourcepad)
-			sourcepad = null
 			sourcepad.targetpad = null
+			sourcepad = null
 			caller_id = null
 	return 1
 
@@ -279,16 +287,15 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 
 		use_power(power_per_hologram)
 	if(last_request + 200 < world.time&&incoming_connection==1)
-		incoming_connection = 0
-		end_call()
 		if(sourcepad)
 			sourcepad.audible_message("<i><span class='game say'>The holopad connection timed out</span></i>")
-			sourcepad = 0
+		incoming_connection = 0
+		end_call()
 	if (caller_id&&sourcepad)
 		if(caller_id.loc!=sourcepad.loc)
-			sourcepad.visible_message("Severing connection to distant holopad.")
-			visible_message("The connection has been terminated by [caller_id].")
+			sourcepad.to_chat(caller_id, "Severing connection to distant holopad.")
 			end_call()
+			audible_message("The connection has been terminated by the caller.")
 	return 1
 
 /obj/machinery/hologram/holopad/proc/move_hologram(mob/living/silicon/ai/user)
