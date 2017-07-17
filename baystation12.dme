@@ -2110,6 +2110,7 @@
 #include "code\modules\research\research.dm"
 #include "code\modules\research\server.dm"
 #include "code\modules\research\stock_parts.dm"
+#include "code\modules\room_construction\room_constructor.dm"
 #include "code\modules\scripting\Errors.dm"
 #include "code\modules\scripting\IDE.dm"
 #include "code\modules\scripting\Options.dm"
