@@ -59,5 +59,55 @@
 
 
 /decl/room_constructor/dungeon
-	var/list/monster_spawns
-	var/list/loot_spawns
+	var/list/monster_spawns = list()
+	var/list/loot_spawns = list()
+
+/decl/room_constructor/New()
+	..()
+	generate_spawns()
+
+/decl/room_constructor/dungeon/proc/generate_spawns()
+	if(construction_map && construction_map.len)
+		var/w = 0
+		var/h = 0
+		for(var/instruction in construction_map)
+			if(instruction == "\n")
+				w = 0
+				h++
+			var/list/construction = construction_map[instruction]
+			if(ROOM_MONSTER_SPAWN in construction)
+				monster_spawns += "[w]:[h]"
+			if(ROOM_LOOT_SPAWN in construction)
+				loot_spawns += "[w]:[h]"
+			w++
+
+
+/decl/room_constructor/dungeon/proc/get_location_from_entry(var/bx, var/by, var/bz, var/entry)
+	var/list/string_loc = splittext(entry, ":")
+	bx += text2num(string_loc[1])
+	by += text2num(string_loc[2])
+
+	var/turf/T = locate(bx, by, bz)
+	return T
+
+/decl/room_constructor/dungeon/proc/spawn_monster(var/rx, ry, rz, var/monster_type)
+	if(!monster_spawns)
+		return
+
+	var/list/possible_spawns = monster_spawns.Copy()
+
+	var/turf/T
+	do
+		if(!possible_spawns)
+			return
+		var/entry = pick(possible_spawns)
+		possible_spawns -= entry
+		T = get_location_from_entry(rx, ry, rz, possible_spawns)
+	while(locate(/mob/living) in T)
+	return new monster_type(T)
+	if(monster_spawns)
+		return new monster_type(get_location_from_list(rx, ry, rz, monster_spawns))
+
+/decl/room_constructor/dungeon/proc/spawn_loot(var/rx, ry, rz, var/loot_type)
+	if(loot_spawns)
+		return new loot_type(get_location_from_entry(rx, ry, rz, pick(loot_spawns)))
