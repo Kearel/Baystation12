@@ -1,9 +1,11 @@
+#define ROOM_EMPTY "room_empty"
 #define ROOM_MONSTER_SPAWN "room_monster"
 #define ROOM_LOOT_SPAWN "room_loot"
 
 /decl/room_constructor
 	var/spawn_map
 	var/list/construction_map
+	var/list/variable_sets
 
 /decl/room_constructor/New()
 	..()
@@ -34,19 +36,20 @@
 		var/list/construction = construction_map[instruction]
 
 		for(var/type in construction)
-			var/atom/M
 			if(!istext(type)) //assuming its some kind of constant
+				var/atom/M
 				if(ispath(type, /turf))
 					M = pos.ChangeTurf(type)
 				else
 					M = new type(pos)
-				var/list/vars = construction[type]
-				if(vars)
-					for(var/V in vars)
-						if(M.vars[V])
-							M.vars[V] = vars[V]
-						else
-							CRASH("[V] is not a valid variable in [M]")
+				if(construction[type] && variable_sets && variable_sets.len && variable_sets[construction[type]])
+					var/list/vars = variable_sets[construction[type]]
+					if(vars)
+						for(var/V in vars)
+							if(M.vars[V])
+								M.vars[V] = vars[V]
+							else
+								CRASH("[V] is not a valid variable in [M]")
 
 	if(special_instruction(pos, instruction))
 		. = 1
@@ -62,7 +65,7 @@
 	var/list/monster_spawns = list()
 	var/list/loot_spawns = list()
 
-/decl/room_constructor/New()
+/decl/room_constructor/dungeon/New()
 	..()
 	generate_spawns()
 
@@ -106,7 +109,7 @@
 	while(locate(/mob/living) in T)
 	return new monster_type(T)
 	if(monster_spawns)
-		return new monster_type(get_location_from_list(rx, ry, rz, monster_spawns))
+		return new monster_type(get_location_from_entry(rx, ry, rz, monster_spawns))
 
 /decl/room_constructor/dungeon/proc/spawn_loot(var/rx, ry, rz, var/loot_type)
 	if(loot_spawns)
