@@ -9,6 +9,7 @@
 		var/obj/structure/closet/C = new(pos)
 		if(prob(5))
 			new /mob/living/simple_animal/hostile/mimic/sleeping(get_turf(C),C)
+		return 1
 
 /decl/room_constructor/dungeon/mimic_room/spawn_loot(var/rx, ry, rz, var/loot_type)
 	var/atom/movable/M = ..()

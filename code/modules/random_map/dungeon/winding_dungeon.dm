@@ -16,7 +16,7 @@
 * Make monster spawning from a datum so I can have general 'group spawns'.
 */
 
-/datum/random_map/winding_dungeon
+/datum/random_map/dungeon/winding_dungeon
 	descriptor = "winding dungeon"
 	wall_type = /turf/simulated/mineral
 	floor_type = /turf/simulated/floor/tiled
@@ -31,129 +31,39 @@
 	var/room_size_min = 4
 	var/room_size_max = 8
 	var/features_multiplier = 0.02
-	var/monster_multiplier = 0.007
-	var/loot_multiplier = 0.01
 
 	var/first_room_x = 45
 	var/first_room_y = 1
 	var/first_room_width = 10
 	var/first_room_height = 10
 
-	var/monster_faction = "dungeon" //if set, factions of the mobs spawned will be set to this.
+	monster_faction = "dungeon" //if set, factions of the mobs spawned will be set to this.
 	//without this they will attack each other.
 
 	var/list/open_positions = list() //organized as: x:y
-	var/list/room_theme_common = list(/datum/room_theme = 10)
-	var/list/room_theme_uncommon = list()
-	var/list/room_theme_rare = list()
-	var/list/monsters_common = list()
-	var/list/monsters_uncommon = list()
-	var/list/monsters_rare = list()
-	var/list/loot_common = list()
-	var/list/loot_uncommon = list()
-	var/list/loot_rare = list()
-
-	var/list/monster_available = list()//turfs that monsters can spawn on. Pregenerated to guard against lag.
+	room_theme_common = list(/datum/room_theme = 10)
 
 	var/list/rooms = list()
-	var/log = 0 //if set will log information to dd
 	limit_x = 50
 	limit_y = 50
 
-/datum/random_map/winding_dungeon/New(var/seed, var/tx, var/ty, var/tz, var/tlx, var/tly, var/do_not_apply, var/do_not_announce, var/list/variable_list)
-	for(var/variable in variable_list)
-		if(variable in src.vars)
-			src.vars[variable] = variable_list[variable]
-	..()
-
-/datum/random_map/winding_dungeon/proc/logging(var/text)
-	if(log)
-		log_to_dd(text)
-
-/datum/random_map/winding_dungeon/proc/get_appropriate_list(var/list/common, var/list/uncommon, var/list/rare, var/x, var/y)
-	var/distance = sqrt((x - round(first_room_x+first_room_width/2)) ** 2 + (y - round(first_room_y+first_room_height/2)) ** 2)
-	if(prob(distance))
-		if(prob(distance/100) && rare && rare.len)
-			logging("Returning rare list.")
-			return rare
-		else if(uncommon && uncommon.len)
-			logging("Returning uncommon list.")
-			return uncommon
-	logging("Returning common list.")
-	return common
-
-
-/datum/random_map/winding_dungeon/apply_to_map()
+/datum/random_map/dungeon/winding_dungeon/apply_to_map()
 	logging("You have [rooms.len] # of rooms")
 	for(var/datum/room/R in rooms)
 		if(!priority_process)
 			sleep(-1)
 		R.apply_to_map(origin_x,origin_y,origin_z,src)
 	..()
-	var/num_of_loot = round(limit_x * limit_y * loot_multiplier)
-	logging("Attempting to add [num_of_loot] # of loot")
-	var/sanity = 0
-	if((loot_common && loot_common.len) || (loot_uncommon && loot_uncommon.len) || (loot_rare && loot_rare.len)) //no monsters no problem
-		while(rooms.len && num_of_loot > 0)
-			if(!priority_process)
-				sleep(-1)
-			var/datum/room/R = pick(rooms)
-			var/list/loot_list = get_appropriate_list(loot_common, loot_uncommon, loot_rare, round(R.x+R.width/2), round(R.y+R.height/2))
-			if(!loot_list || !loot_list.len || R.add_loot(origin_x,origin_y,origin_z,pickweight(loot_list)))
-				num_of_loot--
-				sanity -= 10 //we hahve success so more tries
-				continue
-			sanity++
-			if(sanity > 100)
-				logging("Sanity limit reached on loot spawning #[num_of_loot]")
-				num_of_loot = 0
+
+	spawn_loot()
 
 	for(var/datum/room/R in rooms)
 		rooms -= R
 		qdel(R)
 
-	if((!monsters_common || !monsters_common.len) && (!monsters_uncommon || !monsters_uncommon.len) && (!monsters_rare || !monsters_rare.len)) //no monsters no problem
-		logging("No monster lists detected. Not spawning monsters.")
-		return
+	place_monsters()
 
-	var/num_of_monsters = round(limit_x * limit_y * monster_multiplier)
-	logging("Attempting to add [num_of_monsters] # of monsters")
-
-	while(num_of_monsters > 0)
-		if(!priority_process)
-			sleep(-1)
-		if(!monster_available || !monster_available.len)
-			logging("There are no available turfs left.")
-			num_of_monsters = 0
-			continue
-		var/turf/T = pick(monster_available)
-		monster_available -= T
-		var/list/monster_list = get_appropriate_list(monsters_common, monsters_uncommon, monsters_rare, T.x, T.y)
-		if(monster_list && monster_list.len)
-			var/type = pickweight(monster_list)
-			logging("Generating a monster of type [type] at position ([T.x],[T.y],[origin_z])")
-			var/mob/M = new type(T)
-			if(monster_faction)
-				M.faction = monster_faction
-		else
-			logging("The monster list is empty.")
-		num_of_monsters--
-
-	monster_available = null //Get rid of all the references
-
-/datum/random_map/winding_dungeon/apply_to_turf(var/x, var/y)
-	. = ..()
-	var/turf/T = locate((origin_x-1)+x,(origin_y-1)+y,origin_z)
-	if(T && !T.density)
-		var/can = 1
-		for(var/atom/movable/M in T)
-			if(istype(M,/mob/living) || M.density)
-				can = 0
-				break
-		if(can)
-			monster_available += T
-
-/datum/random_map/winding_dungeon/generate_map()
+/datum/random_map/dungeon/winding_dungeon/generate_map()
 	logging("Winding Dungeon Generation Start")
 	//first generate the border
 	for(var/xx = 1, xx <= limit_x, xx++)
@@ -281,7 +191,7 @@
 	logging("Map completed. Loops: [sanity], [currentFeatures] out of [num_of_features] created.")
 	open_positions.Cut()
 
-/datum/random_map/winding_dungeon/proc/carve_area(var/truex,var/truey,var/width,var/height,var/char, var/wall_char)
+/datum/random_map/dungeon/winding_dungeon/proc/carve_area(var/truex,var/truey,var/width,var/height,var/char, var/wall_char)
 	for(var/mode = 0, mode <= 1, mode++)
 		for(var/ytemp = truey, ytemp < truey + height, ytemp++)
 			if(!mode && (ytemp < 0 || ytemp > limit_y))
@@ -305,7 +215,7 @@
 						map[get_map_cell(xtemp,ytemp)] = char
 	return 1
 
-/datum/random_map/winding_dungeon/proc/create_room_features(var/rox,var/roy,var/width,var/height)
+/datum/random_map/dungeon/winding_dungeon/proc/create_room_features(var/rox,var/roy,var/width,var/height)
 	var/list/room_list = get_appropriate_list(room_theme_common, room_theme_uncommon, room_theme_rare, round(rox+width/2), round(roy+height/2))
 	var/theme_type = pickweight(room_list)
 	if(!theme_type)
@@ -317,11 +227,10 @@
 	rooms += R
 	return 1
 
-/datum/random_map/winding_dungeon/proc/add_loot(var/xorigin,var/yorigin,var/zorigin,var/type)
-	var/datum/room/room = pick(rooms)
-	return room.add_loot(type)
+/datum/random_map/dungeon/winding_dungeon/place_loot(var/xorigin,var/yorigin,var/zorigin,var/type, var/datum/room/room)
+	return room.add_loot(xorigin,yorigin,zorigin,type)
 
-/datum/random_map/winding_dungeon/get_appropriate_path(var/value)
+/datum/random_map/dungeon/winding_dungeon/get_appropriate_path(var/value)
 	switch(value)
 		if(WALL_CHAR)
 			return wall_type
@@ -332,8 +241,15 @@
 		else
 			return floor_type
 
-/datum/random_map/winding_dungeon/get_map_char(var/value)
+/datum/random_map/dungeon/winding_dungeon/get_map_char(var/value)
 	. = ..(value)
 	switch(value)
 		if(BORDER_CHAR)
 			. = "#"
+
+/datum/random_map/dungeon/winding_dungeon/get_loot_location()
+	return safepick(rooms)
+
+/datum/random_map/dungeon/winding_dungeon/calculate_loot_chance(var/datum/room/R)
+	var/distance = abs(R.x - first_room_x) + abs(R.y - first_room_y)
+	return distance / (limit_x * limit_y)  * 150

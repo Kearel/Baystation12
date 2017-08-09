@@ -57,6 +57,17 @@
 	if(!.)
 		CRASH("[instruction] is not a valid instruction for [src.type]")
 
+/decl/room_constructor/proc/get_size()
+	var/width = 0
+	var/height = 0
+	for(var/count in 1 to length(spawn_map))
+		var/instruction = copytext(spawn_map, count, count+1)
+		if(!height)
+			width++
+		if(instruction == "\n")
+			height++
+	return list("width" = width, "height" = height)
+
 /decl/room_constructor/proc/special_instruction(var/turf/pos, var/instruction)
 	return 0
 
@@ -108,8 +119,6 @@
 		T = get_location_from_entry(rx, ry, rz, possible_spawns)
 	while(locate(/mob/living) in T)
 	return new monster_type(T)
-	if(monster_spawns)
-		return new monster_type(get_location_from_entry(rx, ry, rz, monster_spawns))
 
 /decl/room_constructor/dungeon/proc/spawn_loot(var/rx, ry, rz, var/loot_type)
 	if(loot_spawns)
