@@ -95,3 +95,31 @@ Each plays slightly different and has different challenges/benefits
 /datum/god_form/wizard/take_charge(var/mob/living/user, var/charge)
 	linked_god.adjust_power(max(round(charge/100), 1),silent = 1)
 	return 1
+/*
+/datum/god_form/starlight
+	name = "The Starlight Herald"
+	info = {"A thousand stars could never shine as bright as you. In your fire comes both life and death, retribution and judgement.<br>
+	<b>Benefits:</b><br>
+		<font color='blue'>+Ability to craft the Radiant Forge and Statue.<br>
+		+Gain access to your three servants, the Starborn, the Blueforged, and Shadowlings.<br>
+		+Set a follower to be your champion of the faith.</font><br>
+	<b>Drawback:</b><br>
+		<font color='red'>-High power costs.
+		-Spells and abilities cause burn damage on your faithful.
+		-Your champion is key to your success.</font>
+	"}
+	desc = "A large yellow dwarf star."
+	god_icon_state = "starlight"
+	pylon_icon_state = "god"
+
+	buildables = list(/obj/structure/deity/altar,
+					/obj/structure/deity/pylon
+					)
+
+/datum/god_form/starlight/take_charge(var/mob/living/user, var/charge)
+	var/damage = 2
+	if(charge > 100)
+		damage = 16
+	else if(charge > 50)
+		damage = 8
+	user.adjustFireLoss(damage)*/
