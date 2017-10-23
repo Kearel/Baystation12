@@ -26,21 +26,17 @@
 	desc = "A strange ring with symbols carved on it in some arcane language."
 	icon_state = "magic"
 
-/obj/item/clothing/ring/magic/equipped(var/mob/living/carbon/human/H)
+/obj/item/clothing/ring/magic/equipped(var/mob/living/carbon/human/H, var/slot)
 	..()
-	if(istype(H) && H.gloves==src)
-		H.cloaked = TRUE
-		H.update_icons()
-		H.visible_message("<span class='warning'>\[H.name] seems to disappear before your eyes!</span>", "<span class='notice'>You feel completely invisible.</span>")
+	if(istype(H) && slot == SLOT_GLOVES)
+		H.add_cloaking_source(src)
 
 /obj/item/clothing/ring/magic/dropped(var/mob/living/carbon/human/H)
 	if(!..())
 		return 0
 
-	if(istype(H) && H.cloaked)
-		H.cloaked = FALSE
-		H.update_icons()
-		H.visible_message("<span class='warning'>\The [H] appears from thin air!</span>", "<span class='notice'>You have re-appeared.</span>")
+	if(istype(H))
+		H.remove_cloaking_source(src)
 
 /////////////////////////////////////////
 //Reagent Rings
@@ -74,7 +70,7 @@
 
 /obj/item/clothing/ring/reagent/sleepy/New()
 	..()
-	reagents.add_reagent("chloralhydrate", 15) // Less than a sleepy-pen, but still enough to knock someone out
+	reagents.add_reagent(/datum/reagent/chloralhydrate, 15) // Less than a sleepy-pen, but still enough to knock someone out
 
 /////////////////////////////////////////
 //Seals and Signet Rings

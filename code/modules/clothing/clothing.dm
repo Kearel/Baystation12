@@ -124,6 +124,14 @@
 	else
 		icon = initial(icon)
 
+/obj/item/clothing/get_examine_line()
+	. = ..()
+	var/list/ties = list()
+	for(var/accessory in accessories)
+		ties += "\icon[accessory] \a [accessory]"
+	if(ties.len)
+		.+= " with [english_list(ties)] attached"
+
 ///////////////////////////////////////////////////////////////////////
 // Ears: headsets, earmuffs and tiny objects
 /obj/item/clothing/ears
@@ -180,7 +188,7 @@ SEE_MOBS  // can see all mobs, no matter what
 SEE_OBJS  // can see all objs, no matter what
 SEE_TURFS // can see all turfs (and areas), no matter what
 SEE_PIXELS// if an object is located on an unlit area, but some of its pixels are
-          // in a lit area (via pixel_x, y or smooth movement), can see those pixels
+	      // in a lit area (via pixel_x, y or smooth movement), can see those pixels
 BLIND     // can't see anything
 */
 /obj/item/clothing/glasses
@@ -229,6 +237,7 @@ BLIND     // can't see anything
 	species_restricted = list("exclude",SPECIES_NABBER, SPECIES_UNATHI,SPECIES_TAJARA, SPECIES_VOX)
 	sprite_sheets = list(
 		SPECIES_VOX = 'icons/mob/species/vox/gloves.dmi',
+		SPECIES_NABBER = 'icons/mob/species/nabber/gloves.dmi',
 		)
 	blood_overlay_type = "bloodyhands"
 
@@ -449,6 +458,7 @@ BLIND     // can't see anything
 	var/down_body_parts_covered = 0
 	var/down_icon_state = 0
 	var/down_item_flags = 0
+	var/down_flags_inv = 0
 	var/pull_mask = 0
 	var/hanging = 0
 	blood_overlay_type = "maskblood"
@@ -486,12 +496,14 @@ BLIND     // can't see anything
 				body_parts_covered = down_body_parts_covered
 				icon_state = down_icon_state
 				item_flags = down_item_flags
+				flags_inv = down_flags_inv
 				to_chat(usr, "You pull the [src] below your chin.")
 			else
 				gas_transfer_coefficient = initial(gas_transfer_coefficient)
 				body_parts_covered = initial(body_parts_covered)
 				icon_state = initial(icon_state)
 				item_flags = initial(item_flags)
+				flags_inv = initial(flags_inv)
 				to_chat(usr, "You pull the [src] up to cover your face.")
 			update_clothing_icon()
 			user.update_action_buttons()
@@ -548,7 +560,7 @@ BLIND     // can't see anything
 	holding.forceMove(get_turf(usr))
 
 	if(usr.put_in_hands(holding))
-		usr.visible_message("<span class='danger'>\The [usr] pulls a knife out of their boot!</span>")
+		usr.visible_message("<span class='warning'>\The [usr] pulls \the [holding] out of \the [src]!</span>", range = 1)
 		holding = null
 	else
 		to_chat(usr, "<span class='warning'>Your need an empty, unbroken hand to do that.</span>")
@@ -574,7 +586,7 @@ BLIND     // can't see anything
 		user.unEquip(I)
 		I.forceMove(src)
 		holding = I
-		user.visible_message("<span class='notice'>\The [user] shoves \the [I] into \the [src].</span>")
+		user.visible_message("<span class='notice'>\The [user] shoves \the [I] into \the [src].</span>", range = 1)
 		verbs |= /obj/item/clothing/shoes/proc/draw_knife
 		update_icon()
 	else
@@ -664,8 +676,8 @@ BLIND     // can't see anything
 	//convenience var for defining the icon state for the overlay used when the clothing is worn.
 	//Also used by rolling/unrolling.
 	var/worn_state = null
-	valid_accessory_slots = list(ACCESSORY_SLOT_UTILITY,ACCESSORY_SLOT_ARMBAND,ACCESSORY_SLOT_RANK,ACCESSORY_SLOT_DECOR,ACCESSORY_SLOT_MEDAL,ACCESSORY_SLOT_INSIGNIA)
-	restricted_accessory_slots = list(ACCESSORY_SLOT_UTILITY,ACCESSORY_SLOT_ARMBAND,ACCESSORY_SLOT_RANK)
+	valid_accessory_slots = list(ACCESSORY_SLOT_UTILITY,ACCESSORY_SLOT_HOLSTER,ACCESSORY_SLOT_ARMBAND,ACCESSORY_SLOT_RANK,ACCESSORY_SLOT_DEPT,ACCESSORY_SLOT_DECOR,ACCESSORY_SLOT_MEDAL,ACCESSORY_SLOT_INSIGNIA)
+	restricted_accessory_slots = list(ACCESSORY_SLOT_UTILITY,ACCESSORY_SLOT_HOLSTER,ACCESSORY_SLOT_ARMBAND,ACCESSORY_SLOT_RANK,ACCESSORY_SLOT_DEPT)
 
 /obj/item/clothing/under/New()
 	..()

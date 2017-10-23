@@ -15,9 +15,6 @@
 	//var/fireloss = 0  //Burn damage caused by being way too hot, too cold or burnt.
 	//var/halloss = 0   //Hallucination damage. 'Fake' damage obtained through hallucinating or the holodeck. Sleeping should cause it to wear off.
 
-	var/hallucination = 0 //Directly affects how long a mob will hallucinate for
-	var/list/atom/hallucinations = list() //A list of hallucinated people that try to attack the mob. See /obj/effect/fake_attacker in hallucinations.dm
-
 	var/last_special = 0 //Used by the resist verb, likely used to prevent players from bypassing next_move by logging in/out.
 
 	var/t_phoron = null
@@ -40,7 +37,6 @@
 	var/fire_stacks
 
 	var/failed_last_breath = 0 //This is used to determine if the mob failed a breath. If they did fail a brath, they will attempt to breathe each tick, otherwise just once per 4 ticks.
-	var/breath_fail_ratio // How badly they failed a breath. Higher is worse. (ToDo: implement for more mobs)
 	var/possession_candidate // Can be possessed by ghosts if unplayed.
 
 	var/eye_blind = null	//Carbon

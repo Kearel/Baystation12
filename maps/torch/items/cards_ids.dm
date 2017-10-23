@@ -56,9 +56,6 @@
 /obj/item/weapon/card/id/torch/contractor/medical
 	job_access_type = /datum/job/doctor_contractor
 
-/obj/item/weapon/card/id/torch/contractor/medical/chemist
-	job_access_type = /datum/job/chemist
-
 /obj/item/weapon/card/id/torch/contractor/medical/counselor
 	job_access_type = /datum/job/psychiatrist
 
@@ -130,6 +127,12 @@
 /obj/item/weapon/card/id/torch/crew/bridgeofficer
 	job_access_type = /datum/job/bridgeofficer
 
+/obj/item/weapon/card/id/torch/crew/pathfinder
+	job_access_type = /datum/job/pathfinder
+
+/obj/item/weapon/card/id/torch/crew/explorer
+	job_access_type = /datum/job/explorer
+
 //NanoTrasen and Passengers
 
 /obj/item/weapon/card/id/torch/passenger
@@ -180,7 +183,7 @@
 	..()
 	var/species = SPECIES_HUMAN
 	if(prob(10))
-		species = pick(SPECIES_SKRELL,SPECIES_TAJARA,SPECIES_IPC)	
+		species = pick(SPECIES_SKRELL,SPECIES_TAJARA,SPECIES_IPC)
 	var/datum/species/S = all_species[species]
 	var/gender = pick(MALE,FEMALE)
 	registered_name = S.get_random_name(gender)

@@ -229,7 +229,7 @@
 /obj/item/stack/flag/attack_self(var/mob/user)
 	var/turf/T = get_turf(src)
 
-	if(!istype(T, /turf/simulated/floor/asteroid))
+	if(!istype(T, /turf/simulated/floor/asteroid) && !istype(T, /turf/simulated/floor/exoplanet))
 		to_chat(user, "The flag won't stand up in this terrain.")
 		return
 
@@ -253,7 +253,7 @@
 		set_light(2, 0.1) // Very dim so the rest of the flag is barely visible - if the turf is completely dark, you can't see anything on it, no matter what
 		var/image/addon = image(icon = src.icon, icon_state = fringe) // Bright fringe
 		addon.layer = ABOVE_LIGHTING_LAYER
-		addon.plane = LIGHTING_PLANE
+		addon.plane = EFFECTS_ABOVE_LIGHTING_PLANE
 		overlays += addon
 
 /obj/item/stack/flag/proc/knock_down()

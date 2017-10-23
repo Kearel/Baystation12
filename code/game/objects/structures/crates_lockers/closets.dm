@@ -26,7 +26,7 @@
 	var/storage_types = CLOSET_STORAGE_ALL
 	var/setup
 
-	// TODO: Make these into flags. Skipped it for now because it requires updating 100+ locations...
+	// TODO: Turn these into flags. Skipped it for now because it requires updating 100+ locations...
 	var/broken = FALSE
 	var/opened = FALSE
 	var/locked = FALSE
@@ -39,12 +39,12 @@
 
 	return INITIALIZE_HINT_LATELOAD
 
-/obj/structure/closet/LateInitialize()
+/obj/structure/closet/LateInitialize(mapload, ...)
 	var/list/will_contain = WillContain()
 	if(will_contain)
 		create_objects_in_loc(src, will_contain)
 
-	if(!opened)		// if closed, any item at the crate's loc is put in the contents
+	if(!opened && mapload) // if closed and it's the map loading phase, relevant items at the crate's loc are put in the contents
 		store_contents()
 
 /obj/structure/closet/proc/WillContain()
@@ -469,12 +469,12 @@
 	return
 
 // If we use the /obj/structure/closet/proc/togglelock variant BYOND asks the user to select an input for id_card, which is then mostly irrelevant.
-/obj/structure/closet/proc/togglelock_verb(var/mob/user)
+/obj/structure/closet/proc/togglelock_verb()
 	set src in oview(1) // One square distance
 	set category = "Object"
 	set name = "Toggle Lock"
 
-	return togglelock(user)
+	return togglelock(usr)
 
 /obj/structure/closet/proc/togglelock(var/mob/user, var/obj/item/weapon/card/id/id_card)
 	if(!(setup & CLOSET_HAS_LOCK))

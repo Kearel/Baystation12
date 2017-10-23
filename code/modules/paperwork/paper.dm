@@ -406,6 +406,11 @@
 	else if(istype(P, /obj/item/weapon/flame))
 		burnpaper(P, user)
 
+	else if(istype(P, /obj/item/weapon/paper_bundle))
+		var/obj/item/weapon/paper_bundle/attacking_bundle = P
+		attacking_bundle.insert_sheet_at(user, (attacking_bundle.pages.len)+1, src)
+		attacking_bundle.update_icon()
+
 	add_fingerprint(user)
 	return
 
@@ -441,3 +446,12 @@
 /obj/item/weapon/paper/exodus_holodeck
 	name = "holodeck disclaimer"
 	info = "Bruises sustained in the holodeck can be healed simply by sleeping."
+
+/obj/item/weapon/paper/workvisa
+	name = "Sol Work Visa"
+	info = "<center><b><large>Work Visa of the Sol Central Government</large></b></center><br><center><img src = sollogo.png><br><br><i><small>Issued on behalf of the Secretary-General.</small></i></center><hr><BR>This paper hereby permits the carrier to travel unhindered through Sol territories, colonies, and space for the purpose of work and labor."
+	desc = "A flimsy piece of laminated cardboard issued by the Sol Central Government."
+
+/obj/item/weapon/paper/workvisa/New()
+	..()
+	icon_state = "workvisa" //Has to be here or it'll assume default paper sprites.

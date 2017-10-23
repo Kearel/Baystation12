@@ -264,7 +264,7 @@ var/list/mob/living/forced_ambiance_list = new
 
 /area/proc/play_ambience(var/mob/living/L)
 	// Ambience goes down here -- make sure to list each area seperately for ease of adding things in later, thanks! Note: areas adjacent to each other should have the same sounds to prevent cutoff when possible.- LastyScratch
-	if(!(L && L.is_preference_enabled(/datum/client_preference/play_ambiance)))	return
+	if(!(L && L.get_preference_value(/datum/client_preference/play_ambiance) == GLOB.PREF_YES))	return
 
 
 	// If we previously were in an area with force-played ambiance, stop it.
@@ -274,7 +274,7 @@ var/list/mob/living/forced_ambiance_list = new
 
 	var/turf/T = get_turf(L)
 	var/hum = 0
-	if(!L.ear_deaf)
+	if(!L.ear_deaf && !always_unpowered && power_environ)
 		for(var/obj/machinery/atmospherics/unary/vent_pump/vent in src)
 			if(vent.can_pump())
 				hum = 1
@@ -283,7 +283,7 @@ var/list/mob/living/forced_ambiance_list = new
 	if(hum)
 		if(!L.client.ambience_playing)
 			L.client.ambience_playing = 1
-			L.playsound_local(T,sound('sound/ambience/shipambience.ogg', repeat = 1, wait = 0, volume = 25, channel = 2))
+			L.playsound_local(T,sound('sound/ambience/vents.ogg', repeat = 1, wait = 0, volume = 20, channel = 2))
 	else
 		if(L.client.ambience_playing)
 			L.client.ambience_playing = 0
@@ -296,9 +296,9 @@ var/list/mob/living/forced_ambiance_list = new
 		else
 			sound_to(L, sound(null, channel = 1))
 	else if(src.ambience.len && prob(35))
-		if((world.time >= L.client.played + 600))
+		if((world.time >= L.client.played + 3 MINUTES))
 			var/sound = pick(ambience)
-			L.playsound_local(T, sound(sound, repeat = 0, wait = 0, volume = 25, channel = 1))
+			L.playsound_local(T, sound(sound, repeat = 0, wait = 0, volume = 15, channel = 1))
 			L.client.played = world.time
 
 /area/proc/gravitychange(var/gravitystate = 0)

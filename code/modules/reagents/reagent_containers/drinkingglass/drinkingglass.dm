@@ -13,6 +13,7 @@
 	icon = DRINK_ICON_FILE
 	base_icon = "square" // Base icon name
 	volume = 30
+	matter = list("glass" = 65)
 
 	var/list/extras = list() // List of extras. Two extras maximum
 
@@ -44,8 +45,8 @@
 /obj/item/weapon/reagent_containers/food/drinks/glass2/proc/has_ice()
 	if(reagents.reagent_list.len > 0)
 		var/datum/reagent/R = reagents.get_master_reagent()
-		if(!((R.id == "ice") || ("ice" in R.glass_special))) // if it's not a cup of ice, and it's not already supposed to have ice in, see if the bartender's put ice in it
-			if(reagents.has_reagent("ice", reagents.total_volume / 10)) // 10% ice by volume
+		if(!((R.type == /datum/reagent/drink/ice) || ("ice" in R.glass_special))) // if it's not a cup of ice, and it's not already supposed to have ice in, see if the bartender's put ice in it
+			if(reagents.has_reagent(/datum/reagent/drink/ice, reagents.total_volume / 10)) // 10% ice by volume
 				return 1
 
 	return 0

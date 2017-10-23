@@ -13,8 +13,7 @@ var/list/mining_floors = list()
 	name = "Rock"
 	icon = 'icons/turf/walls.dmi'
 	icon_state = "rock"
-	oxygen = 0
-	nitrogen = 0
+	initial_gas = null
 	opacity = 1
 	density = 1
 	blocks_air = 1
@@ -144,6 +143,7 @@ var/list/mining_floors = list()
 /turf/simulated/mineral/proc/UpdateMineral()
 	clear_ore_effects()
 	ore_overlay = image('icons/obj/mining.dmi', "rock_[mineral.icon_tag]")
+	ore_overlay.appearance_flags = RESET_COLOR
 	ore_overlay.turf_decal_layerise()
 	update_icon()
 
@@ -287,7 +287,7 @@ var/list/mining_floors = list()
 
 	clear_ore_effects()
 	var/obj/item/weapon/ore/O = new mineral.ore (src)
-	if(istype(O))
+	if(geologic_data && istype(O))
 		geologic_data.UpdateNearbyArtifactInfo(src)
 		O.geologic_data = geologic_data
 	return O
@@ -326,31 +326,24 @@ var/list/mining_floors = list()
 		N.updateMineralOverlays(1)
 
 /turf/simulated/mineral/proc/excavate_find(var/prob_clean = 0, var/datum/find/F)
-	//with skill and luck, players can cleanly extract finds
-	//otherwise, they come out inside a chunk of rock
-	var/obj/item/weapon/X
-	if(prob_clean)
-		X = new /obj/item/weapon/archaeological_find(src, new_item_type = F.find_type)
-	else
-		X = new /obj/item/weapon/ore/strangerock(src, inside_item_type = F.find_type)
-		geologic_data.UpdateNearbyArtifactInfo(src)
-		X:geologic_data = geologic_data
-
-	//some find types delete the /obj/item/weapon/archaeological_find and replace it with something else, this handles when that happens
-	//yuck
-	var/display_name = "something"
-	if(!X)
-		X = last_find
-	if(X)
-		display_name = X.name
 
 	//many finds are ancient and thus very delicate - luckily there is a specialised energy suspension field which protects them when they're being extracted
 	if(prob(F.prob_delicate))
 		var/obj/effect/suspension_field/S = locate() in src
 		if(!S)
-			if(X)
-				visible_message("<span class='danger'>[pick("[display_name] crumbles away into dust","[display_name] breaks apart")].</span>")
-				qdel(X)
+			visible_message("<span class='danger'>[pick("An object in the rock crumbles away into dust.","Something falls out of the rock and shatters onto the ground.")]</span>")
+			finds.Remove(F)
+			return
+
+	//with skill and luck, players can cleanly extract finds
+	//otherwise, they come out inside a chunk of rock
+	if(prob_clean)
+		var/find = get_archeological_find_by_findtype(F.find_type)
+		new find(src)
+	else
+		var/obj/item/weapon/ore/strangerock/rock = new(src, inside_item_type = F.find_type)
+		geologic_data.UpdateNearbyArtifactInfo(src)
+		rock.geologic_data = geologic_data
 
 	finds.Remove(F)
 
@@ -426,8 +419,7 @@ var/list/mining_floors = list()
 	base_icon_state = "asteroid"
 
 	initial_flooring = null
-	oxygen = 0
-	nitrogen = 0
+	initial_gas = null
 	temperature = TCMB
 	var/dug = 0       //0 = has not yet been dug, 1 = has already been dug
 	var/overlay_detail

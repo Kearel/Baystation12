@@ -223,7 +223,6 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	default_cartridge = /obj/item/weapon/cartridge/medical
 	icon_state = "pda-gene"
 
-
 // Special AI/pAI PDAs that cannot explode.
 /obj/item/device/pda/ai
 	icon_state = "NONE"
@@ -430,6 +429,9 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	var/has_reception = reception.telecomms_reception & TELECOMMS_RECEPTION_SENDER
 	data["reception"] = has_reception
 
+	if(mode==41)
+		data["crew_manifest"] = html_crew_manifest(1, 0)
+
 	if(mode==2)
 		var/convopdas[0]
 		var/pdas[0]
@@ -459,9 +461,6 @@ var/global/list/obj/item/device/pda/PDAs = list()
 				data["convo_name"] = sanitize(c["owner"])
 				data["convo_job"] = sanitize(c["job"])
 				break
-	if(mode==41)
-		GLOB.data_core.get_manifest_list()
-
 
 	if(mode==3)
 		var/turf/T = get_turf(user.loc)
@@ -531,7 +530,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 		data["feed"] = feed
 
-	data["manifest"] = PDA_Manifest
+	data["manifest"] = nano_crew_manifest()
 
 	nanoUI = data
 	// update the ui if it exists, returns null if no ui is passed/found
@@ -1009,7 +1008,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		tnote.Add(list(list("sent" = 1, "owner" = "[P.owner]", "job" = "[P.ownjob]", "message" = "[t]", "target" = "\ref[P]")))
 		P.tnote.Add(list(list("sent" = 0, "owner" = "[owner]", "job" = "[ownjob]", "message" = "[t]", "target" = "\ref[src]")))
 		for(var/mob/M in GLOB.player_list)
-			if(M.stat == DEAD && M.is_preference_enabled(/datum/client_preference/ghost_ears)) // src.client is so that ghosts don't have to listen to mice
+			if(M.stat == DEAD && M.get_preference_value(/datum/client_preference/ghost_ears) == GLOB.PREF_ALL_SPEECH) // src.client is so that ghosts don't have to listen to mice
 				if(istype(M, /mob/new_player))
 					continue
 				M.show_message("<span class='game say'>PDA Message - <span class='name'>[owner]</span> -> <span class='name'>[P.owner]</span>: <span class='message'>[t]</span></span>")
@@ -1327,11 +1326,11 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		// Anything that is left in the page. just tack it on to the end as is
 		formatted_scan=formatted_scan+raw_scan
 
-    	// If there is something in there already, pad it out.
+		// If there is something in there already, pad it out.
 		if (length(note)>0)
 			note = note + "<br><br>"
 
-    	// Store the scanned document to the notes
+		// Store the scanned document to the notes
 		note = "Scanned Document. Edit to restore previous notes/delete scan.<br>----------<br>" + formatted_scan + "<br>"
 		// notehtml ISN'T set to allow user to get their old notes back. A better implementation would add a "scanned documents"
 		// feature to the PDA, which would better convey the availability of the feature, but this will work for now.

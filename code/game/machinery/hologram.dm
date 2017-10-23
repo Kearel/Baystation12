@@ -53,6 +53,8 @@ var/const/HOLOPAD_MODE = RANGE_BASED
 	var/obj/machinery/hologram/holopad/targetpad
 	var/last_message
 
+	var/map_range = -1 //how far on overmap can it connect, -1 for local zlevels only
+
 /obj/machinery/hologram/holopad/New()
 	..()
 	desc = "It's a floor-mounted device for projecting holographic images. Its ID is '[loc.loc]'"
@@ -89,8 +91,13 @@ var/const/HOLOPAD_MODE = RANGE_BASED
 			if(last_request + 200 < world.time) //don't spam other people with requests either, you jerk!
 				last_request = world.time
 				var/list/holopadlist = list()
-				for(var/obj/machinery/hologram/holopad/H in GLOB.machines)
-					if((H.z in GLOB.using_map.station_levels) && H.operable())
+				var/zlevels = GetConnectedZlevels(z)
+				if(GLOB.using_map.use_overmap && map_range >= 0)
+					var/obj/effect/overmap/O = map_sectors["[z]"]
+					for(var/obj/effect/overmap/OO in range(O,map_range))
+						zlevels |= OO.map_z
+				for(var/obj/machinery/hologram/holopad/H in SSmachines.machinery)
+					if((H.z in zlevels) && H.operable())
 						holopadlist["[H.loc.loc.name]"] = H	//Define a list and fill it with the area of every holopad in the world
 				holopadlist = sortAssoc(holopadlist)
 				var/temppad = input(user, "Which holopad would you like to contact?", "holopad list") as null|anything in holopadlist
@@ -229,9 +236,9 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	var/obj/effect/overlay/hologram = new(T)//Spawn a blank effect at the location.
 	if(caller_id)
 		var/tempicon = 0
-		for(var/datum/data/record/t in GLOB.data_core.locked)
-			if(t.fields["name"]==caller_id.name)
-				tempicon = t.fields["image"]
+		for(var/datum/computer_file/crew_record/t in GLOB.all_crew_records)
+			if(t.GetName() == caller_id.name)
+				tempicon = t.photo_front
 		hologram.overlays += getHologramIcon(icon(tempicon)) // Add the callers image as an overlay to keep coloration!
 	else
 		hologram.overlays += A.holo_icon // Add the AI's configured holo Icon
@@ -274,7 +281,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	return 1
 
 
-/obj/machinery/hologram/holopad/process()
+/obj/machinery/hologram/holopad/Process()
 	for (var/mob/living/silicon/ai/master in masters)
 		var/active_ai = (master && !master.incapacitated() && master.client && master.eyeobj)//If there is an AI with an eye attached, it's not incapacitated, and it has a client
 		if((stat & NOPOWER) || !active_ai)
@@ -386,6 +393,11 @@ Holographic project of everything else.
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "hologram0"
 
+/obj/machinery/hologram/holopad/longrange
+	name = "long range holopad"
+	desc = "It's a floor-mounted device for projecting holographic images. This one utilizes bluespace transmitter to communicate with far away locations."
+	map_range = 2
+	power_per_hologram = 1000 //per usage per hologram
 
 #undef RANGE_BASED
 #undef AREA_BASED

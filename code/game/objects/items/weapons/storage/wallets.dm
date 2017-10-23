@@ -35,7 +35,8 @@
 		/obj/item/weapon/reagent_containers/glass/beaker/vial,
 		/obj/item/device/radio/headset,
 		/obj/item/device/paicard,
-		/obj/item/weapon/stamp)
+		/obj/item/weapon/stamp,
+		/obj/item/weapon/key)
 	slot_flags = SLOT_ID
 
 	var/obj/item/weapon/card/id/front_id = null
@@ -47,7 +48,7 @@
 	if(front_id)
 		front_id.dropInto(loc)
 		front_id = null
-	..()
+	. = ..()
 
 /obj/item/weapon/storage/wallet/remove_from_storage(obj/item/W as obj, atom/new_location)
 	. = ..(W, new_location)

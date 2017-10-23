@@ -38,15 +38,15 @@
 	passive_temp_gain = 5  // This should cause IPCs to stabilize at ~80 C in a 20 C environment.
 
 	flags = NO_SCAN | NO_PAIN | NO_POISON
-	spawn_flags = SPECIES_CAN_JOIN | SPECIES_IS_WHITELISTED | SPECIES_NO_FBP_CONSTRUCTION
+	spawn_flags = SPECIES_CAN_JOIN | SPECIES_IS_WHITELISTED | SPECIES_NO_FBP_CONSTRUCTION | SPECIES_NO_LACE
 	appearance_flags = HAS_UNDERWEAR //IPCs can wear undies too :(
 
-	blood_color = "#1F181F"
+	blood_color = "#1f181f"
 	flesh_color = "#575757"
 	virus_immune = 1
 
 	has_organ = list(
-		BP_BRAIN = /obj/item/organ/internal/mmi_holder/posibrain,
+		BP_POSIBRAIN = /obj/item/organ/internal/posibrain,
 		BP_OPTICS = /obj/item/organ/internal/eyes/optics
 		)
 
@@ -95,3 +95,7 @@
 
 /datum/species/machine/get_blood_name()
 	return "oil"
+
+/datum/species/machine/disfigure_msg(var/mob/living/carbon/human/H)
+	var/datum/gender/T = gender_datums[H.get_gender()]
+	return "<span class='danger'>[T.His] monitor is completely busted!</span>\n"
