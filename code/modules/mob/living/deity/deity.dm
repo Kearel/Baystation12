@@ -11,7 +11,7 @@
 	maxHealth = 100 //I dunno what to do with health at this point.
 	universal_understand = 1
 	var/eye_type = /mob/observer/eye/cult
-	var/list/minions = list() //Minds of those who follow him
+	var/list/followers = list() //Minds of those who follow him
 	var/list/structures = list() //The objs that this dude controls.
 	var/list/feats = list() //These are the deities 'skills' that they unlocked. Which can unlock abilities, new categories, etc. What this list actually IS is the names of the feats and whatever data they need,
 	var/obj/item/device/uplink/contained/mob_uplink
@@ -37,7 +37,7 @@
 /mob/living/deity/death()
 	. = ..()
 	if(.)
-		for(var/m in minions)
+		for(var/m in followers)
 			var/datum/mind/M = m
 			if(M.learned_spells)
 				for(var/s in M.learned_spells)
@@ -54,7 +54,7 @@
 
 /mob/living/deity/Destroy()
 	death(0)
-	minions.Cut()
+	followers.Cut()
 	eyeobj.release()
 	structures.Cut()
 	QDEL_NULL(eyeobj)
@@ -115,7 +115,7 @@
 			fully_replace_character_name(newname)
 	src.verbs -= /mob/living/deity/verb/choose_form
 	show_browser(src, null, "window=godform")
-	for(var/m in minions)
+	for(var/m in followers)
 		var/datum/mind/mind = m
 		var/mob/living/L = mind.current
 		L.faction = form.faction

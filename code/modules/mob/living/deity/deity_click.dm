@@ -6,6 +6,10 @@
 			choose_form()
 		return
 	var/list/modifiers = params2list(params)
+	if(following && istype(following(/mob/living/simple_animal/deity)) //Do we have a selected minion?
+		var/mob/living/simple_animal/deity/D = following
+		following.order(A, modifiers)
+		return
 	if(modifiers["shift"] || modifiers["ctrl"])
 		var/datum/phenomena/phenomena = get_phenomena(modifiers["shift"], modifiers["ctrl"])
 		if(phenomena)
@@ -19,3 +23,5 @@
 			D.attack_deity(src)
 			return
 	..()
+
+/mob/living/deity/DblClickOn(var/atom/A, var/params)

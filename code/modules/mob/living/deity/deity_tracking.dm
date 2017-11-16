@@ -1,11 +1,11 @@
 /mob/living/deity/verb/jump_to_follower()
 	set category = "Godhood"
 
-	if(!minions)
+	if(!followers)
 		return
 
 	var/list/could_follow = list()
-	for(var/m in minions)
+	for(var/m in followers)
 		var/datum/mind/M = m
 		if(M.current && M.current.stat != DEAD)
 			could_follow += M.current
@@ -18,7 +18,7 @@
 		follow_follower(choice)
 
 /mob/living/deity/proc/follow_follower(var/mob/living/L)
-	if(!L || L.stat == DEAD || !is_follower(L, silent=1))
+	if(!L || L.stat == DEAD || (!is_follower(L, silent=1) && !is_minion(L, 1)))
 		return
 	if(following)
 		stop_follow()

@@ -7,7 +7,7 @@
 	var/charge = 0
 	var/pulsing = 0
 
-/obj/structure/deity/radiant_statue/process()
+/obj/structure/deity/radiant_statue/Process()
 	if(!linked_god || time_til_process > world.time)
 		return
 	for(var/obj/structure/deity/radiant_statue/s in linked_god.structures)
@@ -44,7 +44,7 @@
 /obj/structure/deity/radiant_statue/proc/stop_charge()
 	pulsing = 0
 	src.visible_message("\The [src] lights up before turning off.")
-	GLOB.processing_objects -= src
+	STOP_PROCESSING(SSobj, src)
 
 /obj/structure/deity/radiant_statue/proc/get_nearby_allies()
 	if(!linked_god)

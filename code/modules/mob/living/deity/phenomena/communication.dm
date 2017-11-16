@@ -28,7 +28,7 @@
 	var/turf/T = get_turf(a)
 	arrow.loc = T
 	var/list/view = view(7,T)
-	for(var/m in linked.minions)
+	for(var/m in linked.followers)
 		var/datum/mind/mind = m
 		if(mind.current)
 			var/mob/M = mind.current

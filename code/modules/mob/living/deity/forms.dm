@@ -1,3 +1,6 @@
+#define CONSTRUCT_SPELL_COST 1
+#define CONSTRUCT_SPELL_TYPE 2
+
 /*A god form basically is a combination of a sprite sheet choice and a gameplay choice.
 Each plays slightly different and has different challenges/benefits
 */
@@ -33,6 +36,16 @@ Each plays slightly different and has different challenges/benefits
 
 /datum/god_form/proc/take_charge(var/mob/living/user, var/charge)
 	return 1
+
+/datum/god_form/proc/get_build_list()
+	var/list/possible_targets = list()
+	for(var/type in buildables)
+		var/cost = 10
+		if(ispath(type, /obj/structure/deity))
+			var/obj/structure/deity/D = type
+			cost = initial(D.build_cost)
+		possible_targets["[linked_god.get_type_name(type)] - [cost]"] = list(cost, type)
+	return possible_targets
 
 /datum/god_form/Destroy()
 	if(linked_god)

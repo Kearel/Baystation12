@@ -5,7 +5,7 @@
 		stat("Power", mob_uplink.uses)
 		stat("Power Minimum", power_min)
 		stat("Structure Num", structures.len)
-		stat("Minion Num", minions.len)
+		stat("Minion Num", followers.len)
 		var/boon_name = "None"
 		if(current_boon)
 			if(istype(current_boon, /spell))

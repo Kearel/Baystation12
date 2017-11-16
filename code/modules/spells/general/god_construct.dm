@@ -1,6 +1,3 @@
-#define CONSTRUCT_SPELL_COST 1
-#define CONSTRUCT_SPELL_TYPE 2
-
 /spell/construction
 	name = "Construction"
 	desc = "This ability will let you summon a structure of your choosing."
@@ -15,26 +12,17 @@
 	cast_sound = 'sound/effects/meteorimpact.ogg'
 
 /spell/construction/choose_targets()
-	var/list/possible_targets = list()
 	if(connected_god)
-		for(var/type in connected_god.form.buildables)
-			var/cost = 10
-			if(ispath(type, /obj/structure/deity))
-				var/obj/structure/deity/D = type
-				cost = initial(D.build_cost)
-			possible_targets["[connected_god.get_type_name(type)] - [cost]"] = list(cost, type)
+		var/list/possible_targets = connected_god.form.get_build_list()
 		var/choice = input("Construct to build.", "Construction") as null|anything in possible_targets
 		if(!choice)
 			return
 		var/list/buildable = possible_targets[choice]
 		if(locate(/obj/structure/deity) in get_turf(holder))
 			return
-
 		charge_max = buildable[CONSTRUCT_SPELL_COST]
-
 		return list(buildable[CONSTRUCT_SPELL_TYPE])
-	else
-		return
+
 
 /spell/construction/cast_check(var/skipcharge, var/mob/user, var/list/targets)
 	if(!..())
@@ -55,6 +43,3 @@
 		target = target[1]
 	var/turf/T = get_turf(user)
 	new target(T, connected_god)
-#undef CONSTRUCT_SPELL_COST
-#undef CONSTRUCT_SPELL_REQ
-#undef CONSTRUCT_SPELL_TYPE

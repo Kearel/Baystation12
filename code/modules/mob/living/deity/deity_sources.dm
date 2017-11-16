@@ -3,7 +3,7 @@
 		return
 
 	adjust_source(30, L)
-	minions += L.mind
+	followers += L.mind
 	if(form)
 		L.faction = form.faction
 
@@ -19,11 +19,11 @@
 
 	adjust_source(30 * (adding ? 1 : -1), L, 0)
 	if(adding)
-		minions += L.mind
+		followers += L.mind
 		if(form)
 			L.faction = form.faction
 	else
-		minions -= L.mind
+		followers -= L.mind
 		L.faction = "neutral"
 
 /mob/living/deity/proc/adjust_power(var/amount, var/silent = 0, var/msg)
@@ -56,7 +56,7 @@
 /mob/living/deity/proc/is_follower(var/mob/living/L, var/silent = 0)
 	if(istype(L))
 		if(L.mind)
-			if(L.mind in minions)
+			if(L.mind in followers)
 				return 1
 		if(!silent)
 			to_chat(src, "<span class='warning'>You do not feel a malleable mind behind that frame.</span>")
@@ -65,7 +65,7 @@
 /mob/living/deity/fully_replace_character_name(var/new_name, var/in_depth = TRUE)
 	if(!..())
 		return 0
-	for(var/m in minions)
+	for(var/m in followers)
 		var/datum/mind/minion = m
 		to_chat(minion.current, "Your master is now known as [new_name]")
 		minion.special_role = "Servant of [new_name]"
