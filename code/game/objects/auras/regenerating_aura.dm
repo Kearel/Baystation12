@@ -100,6 +100,7 @@
 	fire_mult = 4
 	tox_mult = 0
 	nutrition_damage_mult = 2
+	grow_chance = 15
 	organ_mult = 2
 	regen_message = "<span class='warning'>You sense your nymphs shifting internally to regenerate your ORGAN..</span>"
 
