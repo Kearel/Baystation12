@@ -28,6 +28,7 @@
 	src.adding += new /obj/screen/chorus_cancel_building()
 	src.adding += new /obj/screen/chorus_open_blueprints()
 	src.adding += new /obj/screen/chorus_center_on_form()
+	src.adding += new /obj/screen/chorus_delete_building()
 
 	for(var/i in 1 to 4)
 		var/obj/screen/chorus_resource/res = new()
@@ -167,6 +168,17 @@
 	if(usr && istype(usr, /mob/living/chorus))
 		var/mob/living/chorus/C = usr
 		C.choose_form()
+
+/obj/screen/chorus_delete_building
+	name = "Delete Building"
+	screen_loc = "WEST+6:8, SOUTH+1:8"
+	icon = 'icons/mob/screen1_Midnight.dmi'
+	icon_state = "remove"
+
+/obj/screen/chorus_delete_building/Click()
+	if(usr && istype(usr, /mob/living/chorus))
+		var/mob/living/chorus/C = usr
+		C.start_delete()
 
 /obj/screen/chorus_center_on_form
 	name = "Center On Form"

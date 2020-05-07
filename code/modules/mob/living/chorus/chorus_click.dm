@@ -4,8 +4,11 @@
 
 /mob/living/chorus/ClickOn(var/atom/A, var/params)
 	if(istype(A, /obj/structure/chorus))
-		var/obj/structure/chorus/C = A
-		C.chorus_click(src)
+		if(selected_building == deletion)
+			deletion.build(A, src)
+		else
+			var/obj/structure/chorus/C = A
+			C.chorus_click(src)
 	else if(A == src)
 		self_click()
 	else if(phase == CHORUS_PHASE_EGG)

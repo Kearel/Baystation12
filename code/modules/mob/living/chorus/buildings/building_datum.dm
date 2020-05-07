@@ -109,6 +109,20 @@
 			return_list[++return_list.len] = list("name" = initial(s.name), "amount" = building_requirements[r])
 	return return_list
 
+/datum/chorus_building/delete/get_icon_state()
+	return "remove"
+
+/datum/chorus_building/delete/can_build(var/mob/living/chorus/c, var/atom/A, var/warnings = FALSE)
+	if(istype(A, /obj/structure/chorus))
+		var/obj/structure/chorus/s = A
+		return s.owner == c
+	return FALSE
+
+/datum/chorus_building/delete/build(var/atom/target, var/mob/living/chorus/C, var/warnings = FALSE)
+	if(can_build(C, target, warnings))
+		to_chat(C, "Removing [target]")
+		qdel(target)
+
 /datum/chorus_building/set_to_turf
 	var/range = 0
 	var/turf_to_change_to

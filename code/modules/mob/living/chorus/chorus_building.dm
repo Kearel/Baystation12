@@ -1,8 +1,9 @@
 /mob/living/chorus
 	var/datum/chorus_building/selected_building = null //What we are currently selecting for building
+	var/datum/chorus_building/delete/deletion = new()
 	var/list/currently_building = list()
 	var/list/buildings = list()
-	var/construct_speed = 100 //Split up between all constructs
+	var/construct_speed = 1 //Split up between all constructs
 
 /mob/living/chorus/proc/add_building(var/obj/structure/building)
 	if(!istype(building))
@@ -21,9 +22,12 @@
 	update_buildings_followers()
 
 /mob/living/chorus/proc/start_building(var/datum/chorus_building/blueprint, var/atom/target)
-	var/bp = blueprint.build(target, src, TRUE)
-	if(bp)
-		currently_building += bp
+	if(blueprint == deletion)
+		return
+	else
+		var/bp = blueprint.build(target, src, TRUE)
+		if(bp)
+			currently_building += bp
 
 /mob/living/chorus/proc/stop_building(var/obj/structure/chorus_blueprint/cb, var/delete_it = TRUE)
 	currently_building -= cb
@@ -69,3 +73,6 @@
 /mob/living/chorus/proc/update_buildings_followers()
 	var/datum/hud/chorus/C = hud_used
 	C.update_followers_buildings(followers.len, buildings.len)
+
+/mob/living/chorus/proc/start_delete()
+	set_selected_building(deletion)
