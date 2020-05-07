@@ -1225,6 +1225,7 @@
 #include "code\modules\admin\permissionverbs\permissionedit.dm"
 #include "code\modules\admin\secrets\admin_secrets\admin_logs.dm"
 #include "code\modules\admin\secrets\admin_secrets\bombing_list.dm"
+#include "code\modules\admin\secrets\admin_secrets\chorus.dm"
 #include "code\modules\admin\secrets\admin_secrets\jump_shuttle.dm"
 #include "code\modules\admin\secrets\admin_secrets\launch_shuttle.dm"
 #include "code\modules\admin\secrets\admin_secrets\launch_shuttle_forced.dm"
